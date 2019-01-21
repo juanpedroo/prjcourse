@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-    <form name = "form_select_asso" method="post">
+    <form name = "form_select_asso" method="post" action="admin_asso_selected.php">
         <label for="inputEmail">Choix association</label>
         <SELECT NAME="zl_association">
         <?php
@@ -40,14 +40,6 @@
 
         <button type="submit" name = "submit">Choisir</button>
     </form>
-    <?php
-    $association = $_POST['zl_association'];
-    // Mettre toutes les assos en false
-    $sql2 = 'update association set asso_check = false where 1 = 1'; // pas ouf le 1 = 1
-    $rs = pg_exec($idc,$sql2);
-    // Mettre l'asso select en true
-    $sql3 = 'update association set asso_check = true where id_asso ='.$association.'';
-    $rs = pg_exec($idc,$sql3);
-     ?>
+
 </body>
 </html>

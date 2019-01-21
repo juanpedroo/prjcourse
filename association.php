@@ -25,8 +25,32 @@
         $descrassoc = "";
         $telassoc = "";
         $dirassoc = "";
+        include('./includes/connect.inc');
+        $idc = connect();
+
+        $sql = 'select nom_asso, adresse_asso, cp_asso, ville_asso, description_asso,tel_asso, nom_directeur_asso from association where asso_check = true';
+        $resultat = pg_exec($idc, $sql);
+        while($ligne = pg_fetch_assoc($resultat)) {
+            $nomassoc = $ligne['nom_asso'];
+            $adrassoc = $ligne['adresse_asso'];
+            $cpassoc = $ligne['cp_asso'];
+            $villeassoc = $ligne['ville_asso'];
+            $descrassoc = $ligne['description_asso'];
+            $telassoc = $ligne['tel_asso'];
+            $dirassoc = $ligne['nom_directeur_asso'];
+        }
+
+
     ?>
 
-    <p> Cette année, c'est l'association <?php echo "";?> </p>
+    <p> Cette année, c'est l'association <?php echo $nomassoc;?> présidé par <?php echo $dirassoc ?> qui est la bénéficiaire de notre course</p>
+    <p> Voici quelques mots laissés par l'association </p>
+    <?php echo $descrassoc;?>
+    <p> Vous trouverez les coordonnées ci-dessous </p>
+    <?php
+        echo $adrassoc. "<br>";
+        echo $cpassoc. " ". $villeassoc."<br>";
+        echo $telassoc;
+    ?>
 </body>
 </html>
