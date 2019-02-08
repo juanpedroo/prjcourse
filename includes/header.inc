@@ -25,7 +25,7 @@ if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['or
     					<li><a href="#" class="dropdown-item">Option A</a></li>
     					<li><a href="#" class="dropdown-item">Option B</a></li>
     					<li><a href="#" class="dropdown-item">Option C</a></li>
-    					<li><a href="#" class="dropdown-item">Choisir l\'association</a></li>
+    					<li><a href="admin_association.php" class="dropdown-item">Choisir l\'association</a></li>
     				</ul>
     			</li>
     		</ul>

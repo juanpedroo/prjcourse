@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap Navbar Dropdown Login and Signup Form with Social Buttons</title>
+<title>Association</title>
 <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
@@ -46,18 +46,35 @@
             $telassoc = $ligne['tel_asso'];
             $dirassoc = $ligne['nom_directeur_asso'];
         }
-
-
     ?>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-10">
+				<p> Cette année, c'est l'association <?php echo $nomassoc;?> présidé par <?php echo $dirassoc ?> qui est la bénéficiaire de notre course</p>
+			    <p> Voici quelques mots laissés par l'association : </p>
+			    <?php echo $descrassoc;?>
+			</div>
+			<div class="col-md-2">
+				<p> Coordonnées :</p>
+			    <?php
+			        echo $adrassoc. "<br>";
+					echo "<br>";
+			        echo $cpassoc. " ". $villeassoc."<br>";
+					echo "<br>";
+			        echo $telassoc;
+			    ?>
+			</div>
+		</div>
+		<div class="row photo">
+			<div class="col-md-offset-4 col-md-4">
+				<img src="photo.jpg"/>
+			</div>
+		</div>
+	</div>
 
-    <p> Cette année, c'est l'association <?php echo $nomassoc;?> présidé par <?php echo $dirassoc ?> qui est la bénéficiaire de notre course</p>
-    <p> Voici quelques mots laissés par l'association </p>
-    <?php echo $descrassoc;?>
-    <p> Vous trouverez les coordonnées ci-dessous </p>
-    <?php
-        echo $adrassoc. "<br>";
-        echo $cpassoc. " ". $villeassoc."<br>";
-        echo $telassoc;
-    ?>
+
+
+
+
 </body>
 </html>
