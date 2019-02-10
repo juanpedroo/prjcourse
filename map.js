@@ -24,7 +24,7 @@ function createMap(containerId){
  *  @param json options
  *  @return Leaflet layer object
  */
-function createLayer(url, options){
+function createLayer(url, options) {
     var layerOptions= {};
     if(typeof options.maxZoom !== "undefined") {
         layerOptions.maxZoom = options.maxZoom;

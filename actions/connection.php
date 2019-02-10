@@ -1,6 +1,4 @@
 <?php
-    echo " HELLO WORLD ";
-    echo " <br>";
     //session_start();
     include('../includes/connect.inc');
     $idc = connect();

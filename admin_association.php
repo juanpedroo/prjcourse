@@ -33,6 +33,18 @@
 .open .dropdown-toggle.btn-vert {
   background-image: none;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+th {text-align: left;}
 </style>
 <script type="text/javascript">
 	// Prevent dropdown menu from closing when click inside the form
@@ -43,22 +55,60 @@
 </head>
 <body>
     <?php
+        session_start();
         include 'includes/header.inc';
     ?>
     <br>
     <div class="container-fluid">
         <div class="row blabla">
             <div class="col-md-7">
-                <p>Veuillez selectionner l'association qui doit être affichée : </p>
-                <div id="txtHint"><b>Person info will be listed here...</b></div>
+                <p>Infos association selectionnée : </p>
+                <div id="txtHint">
+                    <?php
+                    include('./includes/connect.inc');
+                    $idc = connect();
+                    $sql= "select nom_asso, adresse_asso, cp_asso, ville_asso, description_asso,
+                    tel_asso, nom_directeur_asso
+                    from association
+                    where asso_check = 't'";
+
+                    $result=pg_query($idc,$sql);
+                    echo '<table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">CP</th>
+                    <th scope="col">Ville</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Telephone</th>
+                    <th scope="col">Directeur</th>
+                    </tr>
+                    </thead>
+                    <tbody>';
+                    while($row = pg_fetch_array($result)) {
+                        echo "<tr>";
+                        echo '<th scope="row">' . $row['nom_asso'] . "</th>";
+                        echo "<td>" . $row['adresse_asso'] . "</td>";
+                        echo "<td>" . $row['cp_asso'] . "</td>";
+                        echo "<td>" . $row['ville_asso'] . "</td>";
+                        $desc = $row['description_asso'];
+                        echo "<td>" . substr($row['description_asso'],0,25) . " ...</td>";
+                        echo "<td>" . $row['tel_asso'] . "</td>";
+                        echo "<td>" . $row['nom_directeur_asso'] . "</td>";
+                        echo "</tr>";
+                    }
+                    echo "</tbody>
+                    </table>";
+                    echo $desc;
+                    ?>
+                </div>
             </div>
             <div class="col-md-2">
                 <form name="frm_choixass" method="post" action="actions/update_association.php">
                 Choix : <select id="assos" name="assos" onchange="showAssos(this.value)" class="form-control">
     <?php
 
-        include('./includes/connect.inc');
-        $idc = connect();
 
         // Rqt affiche l'assoc checked = true
         $sqlDef = 'select id_asso, nom_asso from association where asso_check = true';

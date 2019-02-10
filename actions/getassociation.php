@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+<style>
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    table, td, th {
-        border: 1px solid black;
-        padding: 5px;
-    }
+table, td, th {
+    border: 1px solid black;
+    padding: 5px;
+}
 
-    th {text-align: left;}
+th {text-align: left;}
 </style>
 </head>
 <body>
@@ -21,7 +21,7 @@
     $q = intval($_GET['q']);
     include('../includes/connect.inc');
     $idc = connect();
-    $sql= "select nom_asso, adresse_asso, cp_asso, ville_asso, substring(description_asso,0,25) as description_asso,
+    $sql= "select nom_asso, adresse_asso, cp_asso, ville_asso, description_asso,
     tel_asso, nom_directeur_asso
     from association
     where id_asso = '".$q."'";
@@ -46,14 +46,16 @@
         echo "<td>" . $row['adresse_asso'] . "</td>";
         echo "<td>" . $row['cp_asso'] . "</td>";
         echo "<td>" . $row['ville_asso'] . "</td>";
-        echo "<td>" . $row['description_asso'] . " ...</td>";
+        $desc = $row['description_asso'];
+        echo "<td>" . substr($row['description_asso'],0,25) . " ...</td>";
         echo "<td>" . $row['tel_asso'] . "</td>";
         echo "<td>" . $row['nom_directeur_asso'] . "</td>";
         echo "</tr>";
     }
     echo "</tbody>
     </table>";
+    echo $desc;
     pg_close($idc);
     ?>
-    </body>
-    </html>
+</body>
+</html>
