@@ -14,6 +14,9 @@ table, td, th {
 
 th {text-align: left;}
 </style>
+<script src="lib/popper/popper.js"></script>
+<script src="lib/jquery/jquery-3.3.1.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -47,15 +50,15 @@ th {text-align: left;}
         echo "<td>" . $row['cp_asso'] . "</td>";
         echo "<td>" . $row['ville_asso'] . "</td>";
         $desc = $row['description_asso'];
-        echo "<td>" . substr($row['description_asso'],0,25) . " ...</td>";
+        echo "<td>" . substr($row['description_asso'],0,25) . " <a href='#' tabindex='0' id='desc' data-container='body' data-trigger='focus' data-toggle='popover' data-placement='bottom' data-content='".$desc."'>...</a></td>";
         echo "<td>" . $row['tel_asso'] . "</td>";
         echo "<td>" . $row['nom_directeur_asso'] . "</td>";
         echo "</tr>";
     }
     echo "</tbody>
     </table>";
-    echo $desc;
-    pg_close($idc);
+    //echo $desc;
+    //pg_close($idc);
     ?>
 </body>
 </html>
