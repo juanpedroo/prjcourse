@@ -1,6 +1,9 @@
+<script src="lib/jquery/jquery-3.3.1.min.js"></script>
 <?php
+//admin connecté
 if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['organisateur'] == 't')
 {
+
     echo '<nav class="navbar navbar-default navbar-expand-lg navbar-light">
     	<div class="navbar-header d-flex col">
     		<a class="navbar-brand" href="#">Solidaria<b>Bram</b></a>
@@ -17,6 +20,7 @@ if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['or
     			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
     			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
+          <li class="nav-item"><a href="track1.php" class="nav-link">Tracking</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
                 <li class="nav-item dropdown">
@@ -40,6 +44,7 @@ if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['or
     	</div>
     </nav>';
 }
+//user connecté
 else if(isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['organisateur'] == 'f')
 {
     echo '<nav class="navbar navbar-default navbar-expand-lg navbar-light">
@@ -58,6 +63,7 @@ else if(isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION
     			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
     			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
+          <li class="nav-item"><a href="track1.php" class="nav-link">Tracking</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
     		</ul>
@@ -72,6 +78,7 @@ else if(isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION
     	</div>
     </nav>';
 }
+//visiteur non loggué
 else
 {
     echo '<nav class="navbar navbar-default navbar-expand-lg navbar-light">
@@ -90,6 +97,7 @@ else
     			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
     			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
+          <li class="nav-item"><a href="track1.php" class="nav-link">Tracking</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
     		</ul>
@@ -98,16 +106,16 @@ else
     				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Connexion</a>
     				<ul class="dropdown-menu form-wrapper">
     					<li>
-    						<form action="actions/connection.php" method="post">
+    						<form id = "connexion" action="actions/connection.php" method="post">
     							<div class="form-group">
-    								<input type="email" name="email" class="form-control" placeholder="Adresse Mail" required="required">
+    								<input type="email" id="email" name="email" class="form-control" placeholder="Adresse Mail" required="required">
     							</div>
     							<div class="form-group">
-    								<input type="password" name="password" class="form-control" placeholder="Mot de passe" required="required">
+    								<input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required="required">
     							</div>
-    							<input type="submit" name="submit" class="btn btn-primary btn-block" value="Connexion">
-    							<div class="form-footer">
-    								<a href="#">Mot de passe oublié ?</a>
+    							<input type= "submit" class="btn btn-primary btn-block" value="Connexion"/>
+    							<div class="form-footer" id = "fail">
+    								<!-- remplissage ajax -->
     							</div>
     						</form>
     					</li>
@@ -120,4 +128,39 @@ else
     	</div>
     </nav>';
 }
+
 ?>
+
+<script>
+
+$(document).ready(function() {
+  // Action qui est exécutée quand le formulaire est envoyé ( #con est l'ID du formulaire)
+
+  $("#connexion").on('submit', function(e) {
+    e.preventDefault(); // On empêche de soumettre le formulaire
+
+    var $this = $(this); // L'objet jQuery du formulaire
+
+    // Envoi de la requête HTTP en mode asynchrone
+    $.ajax({
+      url: $this.attr('action'), // On récupère l'action (ici action.php)
+      type: $this.attr('method'), // On récupère la méthode (post)
+      data: $this.serialize(), // On sérialise les données = Envoi des valeurs du formulaire
+      dataType: 'json', // JSON
+      success: function(json) { // Si ça c'est passé avec succès
+        // ici on teste la réponse
+        console.log(json.reponse);
+        if(json.reponse === 'ok') {
+          // On peut aussi rediriger vers l'index
+          window.location.href =  window.location.href;
+          $("#fail").html("<p>Ok...</p>");
+        } else {
+          $("#fail").html("<p>Erreur lors de la connexion...</p>");
+        }
+      }
+    });
+
+  });
+});
+
+</script>

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -7,10 +10,18 @@
 		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 		<link rel="stylesheet" href="http://openlayers.org/en/v3.20.1/css/ol.css" type="text/css">
 		<script src="http://openlayers.org/en/v3.20.1/build/ol.js"></script>
+		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="styles/navbar.css">
+		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
+		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 	</head>
 	<body>
-		<div>
-			Précision : <span id="precision"></span> m | Position : <span id="latitude"></span>° ; <span id="longitude"></span>°
+    <?php include 'includes/header.inc'; ?>
+		<div id = "infos">
+			Vitesse : <span id="speed"></span> km/h | Position : <span id="latitude"></span>° ; <span id="longitude"></span>° |
+      Elevation <span id="altitude"></span>m
 		</div>
 		<div id="carte"></div>
 		<script>
@@ -67,9 +78,11 @@
 				})
 			}));
 			// Géolocalisation
+
 			var geolocation = new ol.Geolocation({
 			  // On déclenche la géolocalisation
 			  tracking: true,
+        enableHighAccuracy: true,
 			  // Important : Projection de la carte
 			  projection: view.getProjection()
 			});
@@ -87,6 +100,27 @@
 				$("#longitude").html(newPosition[0]);
 				// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
 				ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
+
+        //récupération des infos de géolocalisation
+        var coord = geolocation.getPosition(),
+        precision = geolocation.getAccuracy(),
+        direction = geolocation.getHeading() || 0,
+        altitude = geolocation.getAltitude() || 0,
+        vitesse = 3.6 * geolocation.getSpeed() || 0;
+
+        //ajax pour ajout des données
+
+        var data = $("#infos").serialize();
+        $.ajax({
+          data: data,
+          type: "post",
+          url: "actions/insertgeocoord.php",
+          success: function(data){
+            console.log("Data Save: " + data);
+          }
+        });
+
+        console.log(coord, precision, altitude, direction, vitesse);
 			});
 			// On alerte si une erreur est trouvée
 			geolocation.on('error', function(erreur) {
