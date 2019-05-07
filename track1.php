@@ -21,7 +21,7 @@ session_start();
     <?php include 'includes/header.inc'; ?>
 		<div id = "infos">
 			Vitesse : <span id="speed"></span> km/h | Position : <span id="latitude"></span>° ; <span id="longitude"></span>° |
-      Elevation <span id="altitude"></span>m
+      Elevation <span id="altitude"></span> m
 		</div>
 		<div id="carte"></div>
 		<script>
@@ -112,10 +112,11 @@ session_start();
 
         var data = $("#infos").serialize();
         $.ajax({
-          data: data,
-          type: "post",
-          url: "actions/insertgeocoord.php",
-          success: function(data){
+          	data: data,
+			dataType : "json",
+          	type: "post",
+          	url: "actions/insertgeocoord.php",
+          	success: function(data){
             console.log("Data Save: " + data);
           }
         });

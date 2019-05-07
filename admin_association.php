@@ -12,9 +12,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="styles/navbar.css">
-<script src="lib/popper/popper.js"></script>
 <script src="lib/jquery/jquery-3.3.1.min.js"></script>
-<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="lib/popper/popper.js"></script>
 
 <style>
 .btn-vert {
@@ -178,6 +178,8 @@ th {text-align: left;}
 
                     // Création de l'événement popover sur le lien de la description
                     $('[data-toggle="popover"]').popover();
+
+
                 }
             )
         }
@@ -188,5 +190,6 @@ th {text-align: left;}
         // On affiche les informations de l'association quand la page est chargée
         $(document).ready( showAssos(id_option) );
     </script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
