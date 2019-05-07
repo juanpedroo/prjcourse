@@ -102,6 +102,13 @@ session_start();
 				ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
 
         //récupération des infos de géolocalisation
+		var infosGeo = {coord:geolocation.getPosition(),
+			precision:geolocation.getPosition(),
+			precision:geolocation.getAccuracy(),
+			direction:geolocation.getHeading() || 0,
+			altitude = geolocation.getAltitude() || 0,
+			vitesse = 3.6 * geolocation.getSpeed() || 0};
+
         var coord = geolocation.getPosition(),
         precision = geolocation.getAccuracy(),
         direction = geolocation.getHeading() || 0,
@@ -109,17 +116,19 @@ session_start();
         vitesse = 3.6 * geolocation.getSpeed() || 0;
 
         //ajax pour ajout des données
+        // var data = $("#infos").serialize();
+        // $.ajax({
+        //   	data: data,
+		// 	dataType : "json",
+        //   	type: "post",
+        //   	url: "actions/insertgeocoord.php",
+        //   	success: function(data){
+        //     console.log("Data Save: " + data);
+        //   }
+        // });
 
-        var data = $("#infos").serialize();
-        $.ajax({
-          	data: data,
-			dataType : "json",
-          	type: "post",
-          	url: "actions/insertgeocoord.php",
-          	success: function(data){
-            console.log("Data Save: " + data);
-          }
-        });
+		$.load('actions/insertgeocoord.php', coord,)
+
 
         console.log(coord, precision, altitude, direction, vitesse);
 			});
