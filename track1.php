@@ -26,31 +26,31 @@ session_start();
 		<div id="carte"></div>
 		<script>
 
-      // create a style to display our position history (track)
-      var trackStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'rgba(0,0,255,1.0)',
-          width: 3,
-          lineCap: 'round'
-        })
-      });
-      // use a single feature with a linestring geometry to display our track
-      var trackFeature = new ol.Feature({
-        geometry: new ol.geom.LineString([])
-      });
-      // we'll need a vector layer to render it
-      var trackLayer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-          features: [trackFeature]
-        }),
-        style: trackStyle
-      });
+	      // create a style to display our position history (track)
+	    	var trackStyle = new ol.style.Style({
+	        	stroke: new ol.style.Stroke({
+	        	color: 'rgba(0,0,255,1.0)',
+	        	width: 3,
+	        	lineCap: 'round'
+	        	})
+			});
+	     	// use a single feature with a linestring geometry to display our track
+			var trackFeature = new ol.Feature({
+				geometry: new ol.geom.LineString([])
+			});
+			// we'll need a vector layer to render it
+			var trackLayer = new ol.layer.Vector({
+				source: new ol.source.Vector({
+					features: [trackFeature]
+				}),
+				style: trackStyle
+				});
 
-      var baseLayer = new ol.layer.Tile({
-        source: new ol.source.OSM()
-      });
+			var baseLayer = new ol.layer.Tile({
+				source: new ol.source.OSM()
+			});
 
-      // Vue
+			// Vue
 			var view = new ol.View({
 				center: [2.113409, 43.243515],
 				zoom: 16,
@@ -82,7 +82,7 @@ session_start();
 			var geolocation = new ol.Geolocation({
 			  // On déclenche la géolocalisation
 			  tracking: true,
-        enableHighAccuracy: true,
+			  enableHighAccuracy: true,
 			  // Important : Projection de la carte
 			  projection: view.getProjection()
 			});
@@ -91,9 +91,10 @@ session_start();
 				var precision = geolocation.getAccuracy();
 				$("#precision").html(precision);
 				var position = geolocation.getPosition();
-        // Centre la carte sur notre position
-        view.setCenter(position);
-        trackFeature.getGeometry().appendCoordinate(position);
+				// Centre la carte sur notre position
+				view.setCenter(position);
+				trackFeature.getGeometry().appendCoordinate(position);
+
 				// On transforme la projection des coordonnées
 				var newPosition=ol.proj.transform(position, 'EPSG:4326', 'EPSG:3857');
 				$("#latitude").html(newPosition[1]);
@@ -101,36 +102,26 @@ session_start();
 				// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
 				ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
 
-        //récupération des infos de géolocalisation
-		var infosGeo = {coord:geolocation.getPosition(),
-			precision:geolocation.getPosition(),
-			precision:geolocation.getAccuracy(),
-			direction:geolocation.getHeading() || 0,
-			altitude = geolocation.getAltitude() || 0,
-			vitesse = 3.6 * geolocation.getSpeed() || 0};
+				var pos = geolocation.getPosition();
+				var x = pos[0];
+				var y = pos[1];
 
-        var coord = geolocation.getPosition(),
-        precision = geolocation.getAccuracy(),
-        direction = geolocation.getHeading() || 0,
-        altitude = geolocation.getAltitude() || 0,
-        vitesse = 3.6 * geolocation.getSpeed() || 0;
+				// console.log(geolocation.getHeading() || 0);
 
-        //ajax pour ajout des données
-        // var data = $("#infos").serialize();
-        // $.ajax({
-        //   	data: data,
-		// 	dataType : "json",
-        //   	type: "post",
-        //   	url: "actions/insertgeocoord.php",
-        //   	success: function(data){
-        //     console.log("Data Save: " + data);
-        //   }
-        // });
-
-		$.load('actions/insertgeocoord.php', coord,)
-
-
-        console.log(coord, precision, altitude, direction, vitesse);
+				// Envoi des infos de géolocalisation
+				$.post('actions/insertgeocoord.php',
+					{
+						x: x,
+						y: y,
+						precision: geolocation.getAccuracy(),
+						direction: geolocation.getHeading() || 0,
+						altitude: geolocation.getAltitude() || 0,
+						vitesse: (3.6 * geolocation.getSpeed()) || 0,
+					},
+					function(data) {
+						console.log(data);
+					}
+				);
 			});
 			// On alerte si une erreur est trouvée
 			geolocation.on('error', function(erreur) {

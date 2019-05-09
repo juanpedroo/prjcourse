@@ -1,27 +1,28 @@
 <?php
-// Récupération de l'id de l'option
-$q = intval($_POST['q']);
-
+session_start();
 include('../includes/connect.inc');
 $idc = connect();
 
 
-$posX =
-$posY =
-$precision =
-$altitude =
-$vitesse =
-$id_user =
-$dateheure = date("Y-m-d ")
-// Requête
-$sql= "SELECT nom_asso, adresse_asso, cp_asso, ville_asso, description_asso,
-tel_asso, nom_directeur_asso
-FROM association
-WHERE id_asso = $q";
+$posX = $_POST['x'];
+$posY = $_POST['y'];
+$precision = $_POST['precision'];
+$direction = $_POST['direction'];
+$altitude = $_POST['altitude'];
+$vitesse = $_POST['vitesse'];
+$id_user = $_SESSION['individu'];
+$dateheure = date("Y-m-d G:i:s");
+
+
+$sql= "INSERT INTO public.point (latitude, longitude, precision, altitude, vitesse,
+    dateheure, id_individu, direction)
+VALUES ($posX,$posY,$precision,$altitude,$vitesse,'$dateheure',$id_user,$direction)";
+
 
 // Exécution de la requête
-$result = pg_query($idc, $sql);
+if(pg_exec($idc, $sql)) {
+    echo ("done");
+}
 
-// Retourne le tableau des résultats encodé en JSON
-echo json_encode( pg_fetch_all($result)[0] );
+
 ?>
