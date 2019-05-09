@@ -20,7 +20,13 @@ if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['or
     			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
     			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
-          <li class="nav-item"><a href="track1.php" class="nav-link">Tracking</a></li>
+                <li class="nav-item dropdown">
+    				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Track <b class="caret"></b></a>
+    				<ul class="dropdown-menu">
+    					<li><a href="tracker.php" class="dropdown-item">Tracker</a></li>
+    					<li><a href="tracking.php" class="dropdown-item">Tracking</a></li>
+    				</ul>
+    			</li>
     			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
                 <li class="nav-item dropdown">
@@ -63,7 +69,13 @@ else if(isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION
     			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
     			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
-          <li class="nav-item"><a href="track1.php" class="nav-link">Tracking</a></li>
+                <li class="nav-item dropdown">
+    				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Track <b class="caret"></b></a>
+    				<ul class="dropdown-menu">
+    					<li><a href="tracker.php" class="dropdown-item">Tracker</a></li>
+    					<li><a href="tracking.php" class="dropdown-item">Tracking</a></li>
+    				</ul>
+    			</li>
     			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
     		</ul>
@@ -96,8 +108,8 @@ else
     		<ul class="nav navbar-nav">
     			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
     			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
-          <li class="nav-item"><a href="track1.php" class="nav-link">Tracking</a></li>
+    			<li class="nav-item"><a href="parcours.php" class="nav-link">Les parcours</a></li>
+                <li class="nav-item"><a href="tracking.php" class="nav-link">Tracking</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
     			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
     		</ul>

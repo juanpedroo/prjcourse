@@ -6,10 +6,9 @@ session_start();
 	<head>
 		<title>Zoom sur la géolocalisation</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
-		<link rel="stylesheet" href="http://openlayers.org/en/v3.20.1/css/ol.css" type="text/css">
-		<script src="http://openlayers.org/en/v3.20.1/build/ol.js"></script>
+    	<meta charset="utf-8">
+		<link rel="stylesheet" href="lib/ol3/ol.css" type="text/css">
+		<script src="lib/ol3/ol.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
@@ -21,7 +20,7 @@ session_start();
     <?php include 'includes/header.inc'; ?>
 		<div id = "infos">
 			Vitesse : <span id="speed"></span> km/h | Position : <span id="latitude"></span>° ; <span id="longitude"></span>° |
-      Elevation <span id="altitude"></span> m
+      		Elevation <span id="altitude"></span> m
 		</div>
 		<div id="carte"></div>
 		<script>
@@ -82,7 +81,7 @@ session_start();
 			var geolocation = new ol.Geolocation({
 			  // On déclenche la géolocalisation
 			  tracking: true,
-			  enableHighAccuracy: true,
+			  // enableHighAccuracy: true, // fout la merde
 			  // Important : Projection de la carte
 			  projection: view.getProjection()
 			});
@@ -96,7 +95,7 @@ session_start();
 				trackFeature.getGeometry().appendCoordinate(position);
 
 				// On transforme la projection des coordonnées
-				var newPosition=ol.proj.transform(position, 'EPSG:4326', 'EPSG:3857');
+				var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
 				$("#latitude").html(newPosition[1]);
 				$("#longitude").html(newPosition[0]);
 				// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
