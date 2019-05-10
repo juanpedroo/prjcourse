@@ -1,6 +1,5 @@
-﻿<?php
+<?php
 session_start();
-include 'includes/header.inc';
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,52 +7,23 @@ include 'includes/header.inc';
 		<title>Zoom sur la géolocalisation</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     	<meta charset="utf-8">
-		<link rel="stylesheet" href="lib/ol3/ol.css" type="text/css">
-		<script src="lib/ol3/ol.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+		<link rel="stylesheet" href="http://openlayers.org/en/v3.20.1/css/ol.css" type="text/css">
+		<script src="http://openlayers.org/en/v3.20.1/build/ol.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles/navbar.css">
 		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
 		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
-		<script src="chrono.js"></script>
-		<style>
-			.carte {
-			height: 400px;
-			width: 100%;
-			}
-  		</style>
 	</head>
 	<body>
-	<div class="container">
-
-		<div class="row map">
-			<div class="col-md-3"></div>
-			<div class="col-md-6"></div>
-				<div id ="carte" class ="carte"></div>
-			<div class="col-md-3"></div>
+    <?php include 'includes/header.inc'; ?>
+		<div id = "infos">
+			Vitesse : <span id="speed"></span> km/h | Position : <span id="latitude"></span>° ; <span id="longitude"></span>° |
+      Elevation <span id="altitude"></span> m
 		</div>
-
-		<div id="stats"class="row stats">
-	        <div id="durée" class="durée col-md-offset-1 col-md-1">0:00:00</div>
-	        <div id="allure" class="allure col-md-1"></div>
-	        <div id="distance" class="distance col-md-1"></div>
-	        <div id="vitesse" class="vitesse col-md-1"></div>
-	        <div id="vmax" class="vmax col-md-1"></div>
-	        <div id="vmin" class="vmin col-md-1"></div>
-	        <div id="vmoy" class="vmoy col-md-1"></div>
-	        <div id="altmin" class="altmin col-md-1"></div>
-	        <div id="altmax" class="altmax col-md-1"></div>
-	        <div id="altmoy" class="altmoy col-md-1"></div>
-    	</div>
-
-		<div class="row bouttons">
-			<div class="col-md-3"></div>
-			<div class="col-md-6"></div>
-			<div class="col-md-3"></div>
-		</div>
-	</div>
-
+		<div id="carte"></div>
 		<script>
 
 	      // create a style to display our position history (track)
@@ -83,7 +53,7 @@ include 'includes/header.inc';
 			// Vue
 			var view = new ol.View({
 				center: [2.113409, 43.243515],
-				zoom: 17,
+				zoom: 16,
 				maxZoom: 19,
 			});
 			// Carte avec un fonds de carte
@@ -107,30 +77,17 @@ include 'includes/header.inc';
 					})
 				})
 			}));
-
-			window.onload = chronoStart(); /* TIMER TODO : Quand clic sur start démarrrer */
-
 			// Géolocalisation
 
 			var geolocation = new ol.Geolocation({
 			  // On déclenche la géolocalisation
 			  tracking: true,
-			  // enableHighAccuracy: true, // fout la merde
+			  enableHighAccuracy: true,
 			  // Important : Projection de la carte
 			  projection: view.getProjection()
 			});
 			// On scrute les changements des propriétés
 			geolocation.on('change', function(evt) {
-
-				// On affiche les stats sur la page
-				var speed = 3.6 * geolocation.getSpeed() || 0;
-				$(".vitesse").html(speed);
-
-				var position = geolocation.getPosition();
-			  	var lat= position[1]);
-			  	$("#longitude").html(position[0]);
-
-
 				var precision = geolocation.getAccuracy();
 				$("#precision").html(precision);
 				var position = geolocation.getPosition();
@@ -139,7 +96,7 @@ include 'includes/header.inc';
 				trackFeature.getGeometry().appendCoordinate(position);
 
 				// On transforme la projection des coordonnées
-				var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
+				var newPosition=ol.proj.transform(position, 'EPSG:4326', 'EPSG:3857');
 				$("#latitude").html(newPosition[1]);
 				$("#longitude").html(newPosition[0]);
 				// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
