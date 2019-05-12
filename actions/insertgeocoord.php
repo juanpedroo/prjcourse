@@ -4,8 +4,8 @@ include('../includes/connect.inc');
 $idc = connect();
 
 
-$posX = $_POST['x'];
-$posY = $_POST['y'];
+$posX = $_POST['lat'];
+$posY = $_POST['long'];
 $precision = $_POST['precision'];
 $direction = $_POST['direction'];
 $altitude = $_POST['altitude'];
@@ -21,7 +21,7 @@ VALUES ($posX,$posY,$precision,$altitude,$vitesse,'$dateheure',$id_user,$directi
 
 // Exécution de la requête
 if(pg_exec($idc, $sql)) {
-    echo ("done");
+    echo ($dateheure);
 }
 
 

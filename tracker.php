@@ -36,8 +36,8 @@ include 'includes/header.inc';
 
 		<div id="stats"class="row stats">
 	        <div id="durée" class="durée col-md-offset-1 col-md-1">0:00:00</div>
-	        <div id="allure" class="allure col-md-1"></div>
 	        <div id="distance" class="distance col-md-1"></div>
+	        <div id="allure" class="allure col-md-1"></div>
 	        <div id="vitesse" class="vitesse col-md-1"></div>
 	        <div id="vmax" class="vmax col-md-1"></div>
 	        <div id="vmin" class="vmin col-md-1"></div>
@@ -56,7 +56,11 @@ include 'includes/header.inc';
 
 		<script>
 
-	      // create a style to display our position history (track)
+			var cpt = 0; // initialisation compteur tableau start;
+			var start = []; // initialisation tableau dateHeure
+			var latOld;
+			var longOld;
+	        // create a style to display our position history (track)
 	    	var trackStyle = new ol.style.Style({
 	        	stroke: new ol.style.Stroke({
 	        	color: 'rgba(0,0,255,1.0)',
@@ -122,49 +126,64 @@ include 'includes/header.inc';
 			// On scrute les changements des propriétés
 			geolocation.on('change', function(evt) {
 
-				// On affiche les stats sur la page
-				var speed = 3.6 * geolocation.getSpeed() || 0;
-				$(".vitesse").html(speed);
-
 				var position = geolocation.getPosition();
-			  	var lat= position[1]);
-			  	$("#longitude").html(position[0]);
-
-
-				var precision = geolocation.getAccuracy();
-				$("#precision").html(precision);
-				var position = geolocation.getPosition();
-				// Centre la carte sur notre position
-				view.setCenter(position);
-				trackFeature.getGeometry().appendCoordinate(position);
-
 				// On transforme la projection des coordonnées
 				var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
 				$("#latitude").html(newPosition[1]);
 				$("#longitude").html(newPosition[0]);
+
 				// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
 				ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
+				var precision = geolocation.getAccuracy();
+				$("#precision").html(precision);
 
-				var pos = geolocation.getPosition();
-				var x = pos[0];
-				var y = pos[1];
 
-				// console.log(geolocation.getHeading() || 0);
+				var lat = newPosition[1];
+				var long = newPosition[0];
+
+				// On affiche les stats sur la page
+				// vitesse
+				var speed = 3.6 * geolocation.getSpeed() || 0;
+				$(".vitesse").html(speed);
+
+				//Distance parcourue
+				if (cpt > 2) {
+				$(".distance").html(distance)
+				console.log("Ancien lat : " + latOld + " Nv lat : "+ lat
+				+ "\nAncien long : " + longOld + " Nv long : " + long);
+				}
+				latOld = lat;
+				longOld = long;
+
+
+
+
+
+				// Centre la carte sur notre position
+				view.setCenter(position);
+				trackFeature.getGeometry().appendCoordinate(position);
+
+
 
 				// Envoi des infos de géolocalisation
 				$.post('actions/insertgeocoord.php',
 					{
-						x: x,
-						y: y,
+						lat: lat,
+						long: long,
 						precision: geolocation.getAccuracy(),
 						direction: geolocation.getHeading() || 0,
 						altitude: geolocation.getAltitude() || 0,
 						vitesse: (3.6 * geolocation.getSpeed()) || 0,
 					},
 					function(data) {
-						console.log(data);
+						start[cpt] = data;
+
+						cpt = cpt + 1;
+
 					}
+
 				);
+
 			});
 			// On alerte si une erreur est trouvée
 			geolocation.on('error', function(erreur) {

@@ -96,9 +96,10 @@ session_start();
 				trackFeature.getGeometry().appendCoordinate(position);
 
 				// On transforme la projection des coordonnées
-				var newPosition=ol.proj.transform(position, 'EPSG:4326', 'EPSG:3857');
+				var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
 				$("#latitude").html(newPosition[1]);
 				$("#longitude").html(newPosition[0]);
+				alert(newPosition[0]);
 				// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
 				ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
 
