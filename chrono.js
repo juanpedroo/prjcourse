@@ -3,15 +3,19 @@ var start = 0
 var end = 0
 var diff = 0
 var timerID = 0
+var msec
+var sec = 0
+var min = 0
+var hr = 0
 //window.onload = chronoStart;
 function chrono(){
 	end = new Date()
 	diff = end - start
 	diff = new Date(diff)
-	var msec = diff.getMilliseconds()
-	var sec = diff.getSeconds()
-	var min = diff.getMinutes()
-	var hr = diff.getHours()-1
+	msec = diff.getMilliseconds()
+	sec = diff.getSeconds()
+	min = diff.getMinutes()
+	hr = diff.getHours()-1
 	if (min < 10){
 		min = "0" + min
 	}
@@ -29,7 +33,6 @@ function chrono(){
 	// document.getElementById("durée") = hr + ":" + min + ":" + sec
 	timerID = setTimeout("chrono()", 10)
 
-
 }
 function chronoStart(){
 	// document.chronoForm.startstop.value = "stop!"
@@ -37,6 +40,17 @@ function chronoStart(){
 	// document.chronoForm.reset.onclick = chronoReset
 	start = new Date()
 	chrono()
+}
+function getHr(){
+	return hr
+}
+
+function getMin(){
+	return min
+}
+
+function getSec(){
+	return sec
 }
 function chronoContinue(){
 	// document.chronoForm.startstop.value = "stop!"
@@ -47,11 +61,11 @@ function chronoContinue(){
 	chrono()
 }
 function chronoReset(){
-	document.getElementById("durée").value = "0:00:00"
+	document.getElementById("durée").value = "00:00:00"
 	start = new Date()
 }
 function chronoStopReset(){
-	document.getElementById("durée").value = "0:00:00"
+	document.getElementById("durée").value = "00:00:00"
 	// document.chronoForm.startstop.onclick = chronoStart
 }
 function chronoStop(){
