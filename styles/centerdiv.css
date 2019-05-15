@@ -1,0 +1,13 @@
+.center-div
+{
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.center-text
+{
+    text-align:center;
+}
