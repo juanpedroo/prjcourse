@@ -76,13 +76,14 @@ include 'includes/header.inc';
 
 			var cpt = 0; // initialisation compteur tableau start;
 			var cptDist = 0;
-			var start = []; // initialisation tableau dateHeure
+			var tabDate = []; // initialisation tableau dateHeure
 			var lat = 0.0;
 			var long = 0.0;
 			var latOld = 0.0;
 			var longOld = 0.0;
 			var distance = [];
 			var total = 0.0;
+			var totalKM = 0.0;
 			var hr;
 			var min;
 			var sec;
@@ -99,7 +100,9 @@ include 'includes/header.inc';
 			var altmin = 9999;
 			var altmoy = 0;
 			var timerInstance = new easytimer.Timer();
-			var start = false;
+			var online = false;
+			var dateFin;
+			var dateDeb;
 
 
 
@@ -142,74 +145,112 @@ include 'includes/header.inc';
 			    pace = paceMins + ":" + paceSecs;
 			    return pace;
 			}
+			// create a style to display our position history (track)
+			var trackStyle = new ol.style.Style({
+				stroke: new ol.style.Stroke({
+				color: 'rgba(0,0,255,1.0)',
+				width: 3,
+				lineCap: 'round'
+				})
+			});
+			// use a single feature with a linestring geometry to display our track
+			var trackFeature = new ol.Feature({
+				geometry: new ol.geom.LineString([])
+			});
+			// we'll need a vector layer to render it
+			var trackLayer = new ol.layer.Vector({
+				source: new ol.source.Vector({
+					features: [trackFeature]
+				}),
+				style: trackStyle
+				});
+
+			var baseLayer = new ol.layer.Tile({
+				source: new ol.source.OSM()
+			});
+
+			// Vue
+			var view = new ol.View({
+				center: [2.113409, 43.243515],
+				zoom: 17,
+				maxZoom: 19,
+			});
+			// Carte avec un fonds de carte
+			var map = new ol.Map({
+				layers: [baseLayer, trackLayer],
+				target: 'carte',
+				view: view
+			});
+			// Objet géographique de la position de géolocalisation
+			var ObjPosition = new ol.Feature();
+			// Attribution d'un style à l'objet
+			ObjPosition.setStyle(new ol.style.Style({
+				image: new ol.style.Circle({
+					radius: 6,
+					fill: new ol.style.Fill({
+						color: '#3399CC'
+					}),
+					stroke: new ol.style.Stroke({
+						color: '#fff',
+						width: 2
+					})
+				})
+			}));
+
+
+			// Géolocalisation
+			var geolocation = new ol.Geolocation({
+			  // On déclenche la géolocalisation
+			  tracking: true,
+			  // enableHighAccuracy: true, // fout la merde
+			  // Important : Projection de la carte
+			  projection: view.getProjection()
+			});
 
 			$( "#start" ).click(function() {
   				//actions
-				timerInstance.start();
-				if (start == false) {
-					// create a style to display our position history (track)
-			    	var trackStyle = new ol.style.Style({
-			        	stroke: new ol.style.Stroke({
-			        	color: 'rgba(0,0,255,1.0)',
-			        	width: 3,
-			        	lineCap: 'round'
-			        	})
-					});
-			     	// use a single feature with a linestring geometry to display our track
-					var trackFeature = new ol.Feature({
-						geometry: new ol.geom.LineString([])
-					});
-					// we'll need a vector layer to render it
-					var trackLayer = new ol.layer.Vector({
-						source: new ol.source.Vector({
-							features: [trackFeature]
-						}),
-						style: trackStyle
-						});
-
-					var baseLayer = new ol.layer.Tile({
-						source: new ol.source.OSM()
-					});
-
-					// Vue
-					var view = new ol.View({
-						center: [2.113409, 43.243515],
-						zoom: 17,
-						maxZoom: 19,
-					});
-					// Carte avec un fonds de carte
-					var map = new ol.Map({
-						layers: [baseLayer, trackLayer],
-						target: 'carte',
-						view: view
-					});
-					// Objet géographique de la position de géolocalisation
-					var ObjPosition = new ol.Feature();
-					// Attribution d'un style à l'objet
-					ObjPosition.setStyle(new ol.style.Style({
-						image: new ol.style.Circle({
-							radius: 6,
-							fill: new ol.style.Fill({
-								color: '#3399CC'
-							}),
-							stroke: new ol.style.Stroke({
-								color: '#fff',
-								width: 2
-							})
-						})
-					}));
-
-				// Géolocalisation
-
-					var geolocation = new ol.Geolocation({
-					  // On déclenche la géolocalisation
-					  tracking: true,
-					  // enableHighAccuracy: true, // fout la merde
-					  // Important : Projection de la carte
-					  projection: view.getProjection()
-					});
+				// TODO: Si online = stop = raz Var
+				if (online = "deconnecte") {
+					cpt = 0; // initialisation compteur tableau start;
+					cptDist = 0;
+					tabDate = []; // initialisation tableau dateHeure
+					lat = 0.0;
+					long = 0.0;
+					latOld = 0.0;
+					longOld = 0.0;
+					distance = [];
+					total = 0.0;
+					totalKM = 0.0;
+					hr = 0;
+					min = 0;
+					sec = 0;
+					tabSpeed = [];
+					cptSpeed = 0;
+					speed = 0;
+					vmax = speed;
+					vmin = 9999;
+					vmoy = 0;
+					tabAlt = [];
+					cptAlt = 0;
+					alt = 0;
+					altmax = alt;
+					altmin = 9999;
+					altmoy = 0;
+					dateFin = 0;
+					dateDeb = 0;
 				}
+				online = "connecte";
+				$.post('actions/setonline.php',
+					{
+						online: online,
+					},
+					function(data) {
+					}
+				);
+				timerInstance.start();
 
+
+				geolocation.setTracking(true);
 				// On scrute les changements des propriétés
 				geolocation.on('change', function(evt) {
 
@@ -224,17 +265,16 @@ include 'includes/header.inc';
 					var precision = geolocation.getAccuracy();
 					$("#precision").html(precision);
 
-
 					lat = newPosition[1];
 					long = newPosition[0];
 
 					// On affiche les stats sur la page
 					// vitesse instant vmax et vmin et vmoy
 					speed = 3.6 * geolocation.getSpeed() || 0;
-					$(".vitesse").html(speed);
-					$(".vmax").html(vmax);
-					$(".vmin").html(vmin);
-					$(".vmoy").html(vmoy);
+					$(".vitesse").html(speed.toFixed(2));
+					$(".vmax").html(vmax.toFixed(2));
+					$(".vmin").html(vmin.toFixed(2));
+					$(".vmoy").html(vmoy.toFixed(2));
 					if (vmin > speed){
 						vmin = speed;
 					}
@@ -258,10 +298,16 @@ include 'includes/header.inc';
 						distance[cptDist] = parseFloat(calcCrow(lat, long, latOld, longOld).toFixed(1));
 						console.log("1 -> cpt : " + cptDist + " value : "+  distance[cptDist]);
 						total += distance[cptDist]; // DEBUG:
+						totalKM += distance[cptDist] /1000; // DEBUG:
 						cptDist++;
 						console.log("2 : " +total); // DEBUG:
 					}
-					$(".distance").html(total);
+					if(total < 1000) {
+						$(".distance").html(total.toFixed(0) + " Mètres");
+					}
+					else {
+						$(".distance").html(totalKM.toFixed(1) + " KM");
+					}
 					latOld = lat;
 					longOld = long;
 
@@ -274,14 +320,14 @@ include 'includes/header.inc';
 					sec = $(".durée").html().substring(6,8);
 					console.log(hr + "&"+ min + "&" + sec);
 					var allure = calculatePace(total, hr, min,sec);
-					$(".allure").html(allure);
+					$(".allure").html(allure + " KM/Min");
 
 					// altitude act, min, max, moy
 					alt = geolocation.getAltitude() || 0;
-					$(".alt").html(alt);
-					$(".altmax").html(altmax);
-					$(".altmin").html(altmin);
-					$(".altmoy").html(altmoy);
+					$(".alt").html(alt.toFixed(0));
+					$(".altmax").html(altmax.toFixed(0));
+					$(".altmin").html(altmin.toFixed(0));
+					$(".altmoy").html(altmoy.toFixed(0));
 					if (altmin > alt){
 						altmin = alt;
 					}
@@ -313,11 +359,11 @@ include 'includes/header.inc';
 							vitesse: speed || 0,
 						},
 						function(data) {
-							start[cpt] = data;
-							cpt = cpt + 1;
-						}
+							tabDate.push(data);
 
+						}
 					);
+
 
 				});
 				// On alerte si une erreur est trouvée
@@ -336,7 +382,42 @@ include 'includes/header.inc';
 			});
 
 			$( "#pause" ).click(function() {
-				timerInstance.pause()
+				timerInstance.pause();
+				geolocation.setTracking(false);
+				online = "pause";
+				$.post('actions/setonline.php',
+					{
+						online: online,
+					},
+					function(data) {
+					}
+				);
+			});
+
+			$("#stop").click(function() {
+				timerInstance.stop();
+				geolocation.setTracking(false);
+				online = "deconnecte";
+				dateFin = tabDate[tabDate.length-1];
+				dateDeb = tabDate[0];
+				$.post('actions/setonline.php',
+					{
+						online: online,
+					},
+					function(data) {
+					}
+				);
+				var chrono = $(".durée").html()
+				$.post('actions/insertperformance.php',
+					{
+						dateFin : dateFin,
+						dateDeb : dateDeb,
+						chrono : chrono,
+
+					},
+					function(data) {
+					}
+				);
 			});
 
 

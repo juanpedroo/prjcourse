@@ -11,7 +11,7 @@ $direction = $_POST['direction'];
 $altitude = $_POST['altitude'];
 $vitesse = $_POST['vitesse'];
 $id_user = $_SESSION['individu'];
-$dateheure = date("Y-m-d G:i:s");
+$dateheure = date("Y-m-d H:i:s");
 
 
 $sql= "INSERT INTO public.point (latitude, longitude, precision, altitude, vitesse,

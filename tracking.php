@@ -1,109 +1,65 @@
+<?php
+session_start();
+include('includes/header.inc');
+include('./includes/connect.inc');
+$idc = connect();
+?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page1</title>
-    <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
-    <style type="text/css">
-    body { width: 800px; margin: 0 auto; }
-    .gpx { border: 2px #aaa solid; border-radius: 5px;
-        box-shadow: 0 0 3px 3px #ccc;
-        width: 800px; margin: 1em auto; }
-    .gpx header { padding: 0.5em; }
-    .gpx h3 { margin: 0; padding: 0; font-weight: bold; }
-    .gpx .start { font-size: smaller; color: #444; }
-    .gpx .map { border: 1px #888 solid; border-left: none; border-right: none;
-        width: 800px; height: 500px; margin: 0; }
-    .gpx footer { background: #f0f0f0; padding: 0.5em; }
-    .gpx ul.info { list-style: none; margin: 0; padding: 0; font-size: smaller; }
-    .gpx ul.info li { color: #666; padding: 2px; display: inline; }
-    .gpx ul.info li span { color: black; }
-    </style>
-</head>
-<body>
-    <body>
-        <section id="demo" class="gpx" data-gpx-source="voit.gpx" data-map-target="demo-map">
-            <header>
-                <h3>Loading...</h3>
-                <span class="start"></span>
-            </header>
+<html>
+	<head>
+		<title>Zoom sur la géolocalisation</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    	<meta charset="utf-8">
+		<link rel="stylesheet" href="lib/ol3/ol.css" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="lib/bootstrap/css/bouton-cercle.css">
+		<link rel="stylesheet" href="styles/navbar.css">
+		<link rel="stylesheet" href="styles/centerdiv.css">
+		<link rel="stylesheet" href = "lib/fontawesome/css/all.min.css">
+		<script src="lib/easytimer/easytimer.min.js"></script>
+		<script src="lib/ol3/ol.js"></script>
+		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
+		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
-            <article>
-                <div class="map" id="demo-map"></div>
-            </article>
+		<style>
+			.carte {
+			height: 400px;
+			width: 100%;
+			}
+  		</style>
+	</head>
+	<body>
+        <?php
+            $sql = "SELECT id_individu, nom_p, prenom_p
+            FROM public.individu
+            WHERE online = 'connecte' or online = 'pause'";
+            $resultat = pg_exec($idc, $sql);
+        ?>
+        <select id="online" name="online" onchange="showOnline(this.value)" class="form-control">
+            <?php
+                while($ligne = pg_fetch_assoc($resultat)) {
+                    print('<option value="'.$ligne['id_individu'].'">'.$ligne['prenom_p'].' '.$ligne['nom_p'].'</option>');
+                }
 
-            <footer>
-                <ul class="info">
-                    <li>Distance : &nbsp;<span class="distance"></span>&nbsp;mètres</li> &mdash;
-                    <li>Durée : &nbsp;<span class="duration"></span></li> &mdash;
-                    <li>Allure : &nbsp;<span class="pace"></span>/mètres</li> &mdash;
-                    <li>Elévation : &nbsp;+<span class="elevation-gain"></span>&nbsp;mètres,
-                        -<span class="elevation-loss"></span>&nbsp;m
-                        (net:&nbsp;<span class="elevation-net"></span>&nbsp;m)</li>
-                </ul>
-                </footer>
-            </section>
+            ?>
 
-            <!-- script here -->
-            <script src="lib/leaflet/leaflet.js"></script>
-            <script src="lib/leaflet-gpx/gpx.js"></script>
-            <script src="map.js"></script>
-            <script>
 
-            function display_gpx(elt) {
-                if (!elt) return;
 
-                var url = elt.getAttribute('data-gpx-source');
-                var mapid = elt.getAttribute('data-map-target');
-                if (!url || !mapid) return;
 
-                function _t(t) { return elt.getElementsByTagName(t)[0]; }
-                function _c(c) { return elt.getElementsByClassName(c)[0]; }
-
-                var map = L.map(mapid);
-                L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
-                }).addTo(map);
-
-                var control = L.control.layers(null, null).addTo(map);
-
-                new L.GPX(url, {
-                    async: true,
-                    marker_options: {
-                        startIconUrl: 'http://github.com/mpetazzoni/leaflet-gpx/raw/master/pin-icon-start.png',
-                        endIconUrl:   'http://github.com/mpetazzoni/leaflet-gpx/raw/master/pin-icon-end.png',
-                        shadowUrl:    'http://github.com/mpetazzoni/leaflet-gpx/raw/master/pin-shadow.png',
-                    },
-                }).on('loaded', function(e) {
-                    var gpx = e.target;
-                    map.fitBounds(gpx.getBounds());
-                    control.addOverlay(gpx, gpx.get_name());
-
-                    /*
-                    * Note: the code below relies on the fact that the demo GPX file is
-                    * an actual GPS track with timing and heartrate information.
-                    */
-                    console.log(gpx.get_start_time().toDateString() + ', '
-                    + gpx.get_start_time().toLocaleTimeString());
-                    console.log(gpx.get_duration_string());
-                    console.log(gpx.get_duration_string(gpx.get_moving_time())+" : moving time");
-                    console.log(gpx.get_duration_string(gpx.get_moving_pace(), true) + " : moving pace");
-
-                    _t('h3').textContent = gpx.get_name(); // nom du fichier
-                    _c('start').textContent = gpx.get_start_time().toDateString() + ', '
-                    + gpx.get_start_time().toLocaleTimeString();
-                    _c('distance').textContent = gpx.get_distance().toFixed(2);
-                    _c('duration').textContent = gpx.get_duration_string(gpx.get_moving_time());
-                    _c('pace').textContent     = gpx.get_duration_string(gpx.get_moving_pace(), true);
-                    _c('elevation-gain').textContent = gpx.get_elevation_gain().toFixed(0);
-                    _c('elevation-loss').textContent = gpx.get_elevation_loss().toFixed(0);
-                    _c('elevation-net').textContent  = gpx.get_elevation_gain().toFixed(0) - gpx.get_elevation_loss().toFixed(0);
-                }).addTo(map);
+        </select>
+        <br>
+        <script>
+        var online = 0;
+        $.post('actions/get_online.php',
+            {
+                online: online,
+            },
+            function(data) {
             }
+        );
+        </script>
 
-            display_gpx(document.getElementById('demo'));
-            </script>
-
-        </body>
-        </html>
+    </body>
+</html>
