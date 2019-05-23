@@ -7,7 +7,7 @@ $idc = connect();
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Zoom sur la géolocalisation</title>
+		<title>TRacking des participants</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     	<meta charset="utf-8">
 		<link rel="stylesheet" href="lib/ol3/ol.css" type="text/css">
@@ -32,6 +32,11 @@ $idc = connect();
 	</head>
 	<body>
         <?php
+						$sql0= "UPDATE public.individu
+										SET online = 'deconnecte'
+										WHERE now() - last_activity > '00:01:00.00'";
+						pg_exec($idc,$sql0);
+
             $sql = "SELECT id_individu, nom_p, prenom_p
             FROM public.individu
             WHERE online = 'connecte' or online = 'pause'";
@@ -42,23 +47,30 @@ $idc = connect();
                 while($ligne = pg_fetch_assoc($resultat)) {
                     print('<option value="'.$ligne['id_individu'].'">'.$ligne['prenom_p'].' '.$ligne['nom_p'].'</option>');
                 }
-
             ?>
-
-
-
-
         </select>
         <br>
         <script>
-        var online = 0;
-        $.post('actions/get_online.php',
-            {
-                online: online,
-            },
-            function(data) {
-            }
-        );
+				function showAssos(option) {
+            $.post('./actions/get_online.php',
+                { id_indvidu: option },
+
+                // Fonction quand success
+                function(data) {
+                    // Décode du JSON le résultat
+                    var res = JSON.parse(data);
+                    // Affectation des nouvelles valeurs
+                    $('#nom_asso')[0].innerHTML = res['nom_asso'];
+                    $('#adresse_asso')[0].innerHTML = res['adresse_asso'];
+                    $('#cp_asso')[0].innerHTML = res['cp_asso'];
+                    $('#ville_asso')[0].innerHTML = res['ville_asso'];
+                    $('#description_asso')[0].innerHTML = res['description_asso'].substring(0, 25) + ' ';
+                    $('#tel_asso')[0].innerHTML = res['tel_asso'];
+                    $('#nom_directeur_asso')[0].innerHTML = res['nom_directeur_asso'];
+								}
+        		);
+				}
+
         </script>
 
     </body>

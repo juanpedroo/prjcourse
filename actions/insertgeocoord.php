@@ -10,13 +10,14 @@ $precision = $_POST['precision'];
 $direction = $_POST['direction'];
 $altitude = $_POST['altitude'];
 $vitesse = $_POST['vitesse'];
+$type_point = $_POST['type_point'];
 $id_user = $_SESSION['individu'];
 $dateheure = date("Y-m-d H:i:s");
 
 
 $sql= "INSERT INTO public.point (latitude, longitude, precision, altitude, vitesse,
-    dateheure, id_individu, direction)
-VALUES ($posX,$posY,$precision,$altitude,$vitesse,'$dateheure',$id_user,$direction)";
+    dateheure, id_individu, direction,type_point)
+VALUES ($posX,$posY,$precision,$altitude,$vitesse,'$dateheure',$id_user,$direction,'$type_point')";
 
 
 // Exécution de la requête

@@ -100,9 +100,10 @@ include 'includes/header.inc';
 			var altmin = 9999;
 			var altmoy = 0;
 			var timerInstance = new easytimer.Timer();
-			var online = false;
+			var online;
 			var dateFin;
 			var dateDeb;
+			var etat ='';
 
 
 
@@ -238,6 +239,7 @@ include 'includes/header.inc';
 					altmoy = 0;
 					dateFin = 0;
 					dateDeb = 0;
+					etat = '';
 				}
 				online = "connecte";
 				$.post('actions/setonline.php',
@@ -248,11 +250,21 @@ include 'includes/header.inc';
 					}
 				);
 				timerInstance.start();
+				etat = 'start';
 
 
 				geolocation.setTracking(true);
 				// On scrute les changements des propriétés
 				geolocation.on('change', function(evt) {
+
+					online = "connecte";
+					$.post('actions/setonline.php',
+						{
+							online: online,
+						},
+						function(data) {
+						}
+					);
 
 					var position = geolocation.getPosition();
 					// On transforme la projection des coordonnées
@@ -296,11 +308,9 @@ include 'includes/header.inc';
 					else if (lat != latOld || long != longOld){
 						//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
 						distance[cptDist] = parseFloat(calcCrow(lat, long, latOld, longOld).toFixed(1));
-						console.log("1 -> cpt : " + cptDist + " value : "+  distance[cptDist]);
-						total += distance[cptDist]; // DEBUG:
-						totalKM += distance[cptDist] /1000; // DEBUG:
+						total += distance[cptDist];
+						totalKM += distance[cptDist] /1000;
 						cptDist++;
-						console.log("2 : " +total); // DEBUG:
 					}
 					if(total < 1000) {
 						$(".distance").html(total.toFixed(0) + " Mètres");
@@ -345,12 +355,19 @@ include 'includes/header.inc';
 					// Centre la carte sur notre position
 					view.setCenter(position);
 					trackFeature.getGeometry().appendCoordinate(position);
-
-
+					var type_point;
+					if (cpt <1) {
+						type_point = "start";
+					}
+					else {
+						type_point = "intermediaire";
+					}
 
 					// Envoi des infos de géolocalisation
 					$.post('actions/insertgeocoord.php',
 						{
+
+							type_point: type_point,
 							lat: lat,
 							long: long,
 							precision: geolocation.getAccuracy(),
@@ -360,12 +377,26 @@ include 'includes/header.inc';
 						},
 						function(data) {
 							tabDate.push(data);
+							console.log(tabDate);
+							do {
+								$.post('actions/insertperformance.php',
+									{
+										etat: etat,
+										dateDeb : tabDate[0],
+									},
+									function(data) {
+									}
+								);
+							} while (tabDate.length = 0);
+							console.log(tabDate.length);
+
 
 						}
 					);
 
 
 				});
+
 				// On alerte si une erreur est trouvée
 				geolocation.on('error', function(erreur) {
 					alert('Echec de la géolocalisation : ' +erreur.message);
@@ -395,6 +426,7 @@ include 'includes/header.inc';
 			});
 
 			$("#stop").click(function() {
+				etat = 'stop';
 				timerInstance.stop();
 				geolocation.setTracking(false);
 				online = "deconnecte";
@@ -410,6 +442,7 @@ include 'includes/header.inc';
 				var chrono = $(".durée").html()
 				$.post('actions/insertperformance.php',
 					{
+						etat: etat,
 						dateFin : dateFin,
 						dateDeb : dateDeb,
 						chrono : chrono,
