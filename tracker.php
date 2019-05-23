@@ -103,7 +103,7 @@ include 'includes/header.inc';
 			var online;
 			var dateFin;
 			var dateDeb;
-			var etat ='';
+			var etat ="";
 
 
 
@@ -239,7 +239,7 @@ include 'includes/header.inc';
 					altmoy = 0;
 					dateFin = 0;
 					dateDeb = 0;
-					etat = '';
+					etat = "";
 				}
 				online = "connecte";
 				$.post('actions/setonline.php',
@@ -250,7 +250,7 @@ include 'includes/header.inc';
 					}
 				);
 				timerInstance.start();
-				etat = 'start';
+				etat = "start";
 
 
 				geolocation.setTracking(true);
@@ -362,7 +362,7 @@ include 'includes/header.inc';
 					else {
 						type_point = "intermediaire";
 					}
-
+					cpt++;
 					// Envoi des infos de géolocalisation
 					$.post('actions/insertgeocoord.php',
 						{
@@ -378,7 +378,9 @@ include 'includes/header.inc';
 						function(data) {
 							tabDate.push(data);
 							console.log(tabDate);
-							do {
+							console.log(tabDate[0]);
+							console.log(tabDate.length);
+							if (tabDate.length < 2) {
 								$.post('actions/insertperformance.php',
 									{
 										etat: etat,
@@ -387,8 +389,7 @@ include 'includes/header.inc';
 									function(data) {
 									}
 								);
-							} while (tabDate.length = 0);
-							console.log(tabDate.length);
+							}
 
 
 						}
@@ -426,7 +427,7 @@ include 'includes/header.inc';
 			});
 
 			$("#stop").click(function() {
-				etat = 'stop';
+				etat = "stop";
 				timerInstance.stop();
 				geolocation.setTracking(false);
 				online = "deconnecte";
@@ -439,7 +440,7 @@ include 'includes/header.inc';
 					function(data) {
 					}
 				);
-				var chrono = $(".durée").html()
+				var chrono = $(".durée").html();
 				$.post('actions/insertperformance.php',
 					{
 						etat: etat,
