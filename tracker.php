@@ -377,9 +377,6 @@ include 'includes/header.inc';
 						},
 						function(data) {
 							tabDate.push(data);
-							console.log(tabDate);
-							console.log(tabDate[0]);
-							console.log(tabDate.length);
 							if (tabDate.length < 2) {
 								$.post('actions/insertperformance.php',
 									{

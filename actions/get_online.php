@@ -3,18 +3,23 @@ session_start();
 include('../includes/connect.inc');
 $idc = connect();
 
-$id_individu = $_POST['id_individu'];
+$id_individu = intval($_POST['id_individu']);
+$id_point = $_POST['id_point'];
 
 
-$sql= "SELECT latitude, longitude, altitude, vitesse, dateheure
+$sql= "SELECT latitude, longitude, altitude, vitesse, dateheure, type_point, id_point
        FROM public.point
-       WHERE id_individu = $id_individu and id_point > ";
-// TODO: 
-//        SELECT latitude, longitude, altitude, vitesse, dateheure, type_point, id_point
-// FROM public.point
-// WHERE id_individu = 3 and id_point >= (select max(id_point) from public.point where id_individu = 3 and type_point = 'start')
+       WHERE id_individu = 3 AND id_point >= (select max(id_point) from public.point where id_individu = 3 and type_point = 'start')
+       AND id_point > $id_point";
 
-if(pg_exec($idc, $sql)) {
-    echo ("Done");
-}
+
+
+// Exécution de la requête
+$result = pg_query($idc, $sql);
+
+// Retourne le tableau des résultats encodé en JSON
+
+echo json_encode(pg_fetch_all($result));
+
+
 ?>
