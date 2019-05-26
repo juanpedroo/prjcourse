@@ -210,9 +210,8 @@ include 'includes/header.inc';
 
 			$( "#start" ).click(function() {
   				//actions
-				// TODO: Si online = stop = raz Var
 				if (online = "deconnecte") {
-					cpt = 0; // initialisation compteur tableau start;
+					cpt = 0;
 					cptDist = 0;
 					tabDate = []; // initialisation tableau dateHeure
 					lat = 0.0;
@@ -266,7 +265,8 @@ include 'includes/header.inc';
 						}
 					);
 
-					var position = geolocation.getPosition();
+					position = geolocation.getPosition();
+
 					// On transforme la projection des coordonnées
 					var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
 					$("#latitude").html(newPosition[1]);
@@ -408,6 +408,18 @@ include 'includes/header.inc';
 					map: map,
 					source: sourceVecteur
 				});
+
+				// Zoom sur l'emprise du vecteur
+				// sourceVecteur.once('change', function(evt){
+				// // On vérifie que la source du vecteur sont chargés
+				// if (sourceVecteur.getState() === 'ready') {
+				// 	// On vérifie que le veteur contient au moins un objet géographique
+				// 	if (sourceVecteur.getFeatures().length >0) {
+				// 		// On adapte la vue de la carte à l'emprise du vecteur
+				// 		map.getView().fit(sourceVecteur.getExtent(), map.getSize());
+				// 	}
+				// }
+				// });
 			});
 
 			$( "#pause" ).click(function() {

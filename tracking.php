@@ -25,7 +25,7 @@ $idc = connect();
 
 		<style>
 			.carte {
-			height: 400px;
+			height: 800px;
 			width: 100%;
 			}
   		</style>
@@ -43,7 +43,7 @@ $idc = connect();
             $resultat = pg_exec($idc, $sql);
         ?>
         <select id="online" name="online" onchange="showOnline(this.value)" class="form-control">
-			<option value = "0"><option>
+			<option value = "0" >Veuillez selectionnez un particpant actuellement en ligne</option>
             <?php
                 while($ligne = pg_fetch_assoc($resultat)) {
                     print('<option value="'.$ligne['id_individu'].'">'.$ligne['prenom_p'].' '.$ligne['nom_p'].'</option>');
@@ -83,12 +83,13 @@ $idc = connect();
 				center: [2.113409, 43.243515],
 				zoom: 17,
 				maxZoom: 19,
+				projection: 'EPSG:4326',
 			});
 			// Carte avec un fonds de carte
 			var map = new ol.Map({
 				layers: [baseLayer, trackLayer],
 				target: 'carte',
-				view: view
+				view: view,
 			});
 			// Objet géographique de la position de géolocalisation
 			var ObjPosition = new ol.Feature();
@@ -107,33 +108,45 @@ $idc = connect();
 			}));
 
 			//Obtention des infos de tracking
-			var id_point = 0;
+			// var id_point = 0;
+			// var coordonnees = [];
+
 			function showOnline(option) {
+				var id_point = 0;
+				coordonnees = [];
+				test = [];
 	            $.post('./actions/get_online.php',
-	                { id_indvidu: option,
-					  id_point: id_point,
+	                {
+					    option: option,
+					    id_point: id_point,
 					},
 	                function(data) {
 	                    // Décode du JSON le résultat
+						if (option != 0) {
+							JSON.parse(data).forEach((ligne) => {
+								// console.log(ligne);
+								coordonnees[0] = (ligne.longitude);
+								coordonnees[1] = (ligne.latitude);
+								view.setCenter(coordonnees);
+								ObjPosition.setGeometry( coordonnees ? new ol.geom.Point(coordonnees) : null );
+		        				trackFeature.getGeometry().appendCoordinate(coordonnees);
 
-						JSON.parse(data).forEach((ligne) => {
-							latitude.ligne,
-							longitude.ligne;
-						});
 
+							});
 
-	                    // // Affectation des nouvelles valeurs
-	                    // $('#nom_asso')[0].innerHTML = res['nom_asso'];
-	                    // $('#adresse_asso')[0].innerHTML = res['adresse_asso'];
-	                    // $('#cp_asso')[0].innerHTML = res['cp_asso'];
-	                    // $('#ville_asso')[0].innerHTML = res['ville_asso'];
-	                    // $('#description_asso')[0].innerHTML = res['description_asso'].substring(0, 25) + ' ';
-	                    // $('#tel_asso')[0].innerHTML = res['tel_asso'];
-	                    // $('#nom_directeur_asso')[0].innerHTML = res['nom_directeur_asso'];
-						// id_point = res['id_point'];
+						}
 					}
 	        	);
 			}
+			// Source du vecteur contenant l'objet géographique
+			var sourceVecteur = new ol.source.Vector({
+					features: [ObjPosition]
+			});
+			// Couche vectorielle
+			var vecteur = new ol.layer.Vector({
+				map: map,
+				source: sourceVecteur
+			});
 
         </script>
 
