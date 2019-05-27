@@ -110,8 +110,8 @@ $idc = connect();
                             coordonnees[1] = (ligne.latitude);
                             console.log(coordonnees);
                             test.push(ligne.latitude);
-                            points.push(ol.proj.transform([ligne.longitude,ligne.latitude],'EPSG:4326', 'EPSG:4326'));
-                            point = new ol.geom.Point([coordonnees[0],coordonnees[1]]).transform('EPSG:4326', 'EPSG:4326');
+                            points.push(ol.proj.transform([parseFloat(ligne.longitude),parseFloat(ligne.latitude)],'EPSG:4326', 'EPSG:4326'));
+                            point = new ol.geom.Point(parseFloat(ligne.longitude),parseFloat(ligne.latitude)).transform('EPSG:4326', 'EPSG:4326');
                             fea = new ol.Feature({geometry:point});
                             vectorSourcePoint.addFeature(fea);
 
