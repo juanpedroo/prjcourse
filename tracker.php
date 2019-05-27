@@ -38,18 +38,31 @@ include 'includes/header.inc';
 			<div class="col-md-3"></div>
 		</div>
 
-		<div id="stats"class="row stats">
-	        <div id="durée" class="durée col-md-offset-1 col-md-1 center-text">00:00:00</div>
-	        <div id="distance" class="distance col-md-1 center-text">0.00 KM</div>
-	        <div id="allure" class="allure col-md-1 center-text">00"00</div>
-	        <div id="vitesse" class="vitesse col-md-1 center-text">0</div>
-	        <div id="vmax" class="vmax col-md-1 center-text">0</div>
-	        <div id="vmin" class="vmin col-md-1 center-text">0</div>
-	        <div id="vmoy" class="vmoy col-md-1 center-text">0</div>
-			<div id="alt" class="alt col-md-1 center-text">0</div>
-	        <div id="altmin" class="altmin col-md-1 center-text">0</div>
-	        <div id="altmax" class="altmax col-md-1 center-text">0</div>
-	        <div id="altmoy" class="altmoy col-md-1 center-text">0</div>
+		<div id="stats"class="row libelle-stats">
+	        <div class="col-md-offset-1 col-md-1 center-text">Durée</div>
+	        <div class="col-md-1 center-text">Distance</div>
+	        <div class="col-md-1 center-text">Allure</div>
+	        <div class="col-md-1 center-text">Vitesse</div>
+	        <div class="col-md-1 center-text">Vitesse Max</div>
+	        <div class="col-md-1 center-text">Vitesse Min</div>
+	        <div class="col-md-1 center-text">Vitesse Moy</div>
+			<div class="col-md-1 center-text">Altitude</div>
+	        <div class="col-md-1 center-text">Altitude Min</div>
+	        <div class="col-md-1 center-text">Altitude Max</div>
+	        <div class="col-md-1 center-text">Altitude Moy</div>
+    	</div>
+		<div id="stats"class="row data-stats">
+	        <div id="durée" class="durée col-md-offset-1 col-md-1 center-text"></div>
+	        <div id="distance" class="distance col-md-1 center-text"></div>
+	        <div id="allure" class="allure col-md-1 center-text"></div>
+	        <div id="vitesse" class="vitesse col-md-1 center-text"></div>
+	        <div id="vmax" class="vmax col-md-1 center-text"></div>
+	        <div id="vmin" class="vmin col-md-1 center-text"></div>
+	        <div id="vmoy" class="vmoy col-md-1 center-text"></div>
+			<div id="alt" class="alt col-md-1 center-text"></div>
+	        <div id="altmin" class="altmin col-md-1 center-text"></div>
+	        <div id="altmax" class="altmax col-md-1 center-text"></div>
+	        <div id="altmoy" class="altmoy col-md-1 center-text"></div>
     	</div>
 		<br>
 		<div class="row bouttons">
@@ -143,7 +156,7 @@ include 'includes/header.inc';
 			    //console.log(calculatedPace);
 			    var paceMins = Math.floor(calculatedPace/60);
 			    var paceSecs = calculatedPace - (paceMins*60);
-			    pace = paceMins + ":" + paceSecs;
+			    pace = paceMins + '"' + paceSecs;
 			    return pace;
 			}
 			// create a style to display our position history (track)
@@ -173,8 +186,8 @@ include 'includes/header.inc';
 			// Vue
 			var view = new ol.View({
 				center: [2.113409, 43.243515],
-				zoom: 17,
-				maxZoom: 19,
+				zoom: 19,
+				maxZoom: 23,
 			});
 			// Carte avec un fonds de carte
 			var map = new ol.Map({
@@ -269,13 +282,13 @@ include 'includes/header.inc';
 
 					// On transforme la projection des coordonnées
 					var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
-					$("#latitude").html(newPosition[1]);
-					$("#longitude").html(newPosition[0]);
+					// $("#latitude").html(newPosition[1]);
+					// $("#longitude").html(newPosition[0]);
 
 					// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
 					ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
 					var precision = geolocation.getAccuracy();
-					$("#precision").html(precision);
+					//$("#precision").html(precision);
 
 					lat = newPosition[1];
 					long = newPosition[0];
@@ -284,9 +297,9 @@ include 'includes/header.inc';
 					// vitesse instant vmax et vmin et vmoy
 					speed = 3.6 * geolocation.getSpeed() || 0;
 					$(".vitesse").html(speed.toFixed(2));
-					$(".vmax").html(vmax.toFixed(2));
-					$(".vmin").html(vmin.toFixed(2));
-					$(".vmoy").html(vmoy.toFixed(2));
+					$(".vmax").html("<h5>"+vmax.toFixed(2)+"</h5");
+					$(".vmin").html("<h5>"+vmin.toFixed(2)+"</h5");
+					$(".vmoy").html("<h5>"+vmoy.toFixed(2)+"</h5");
 					if (vmin > speed){
 						vmin = speed;
 					}
@@ -303,7 +316,7 @@ include 'includes/header.inc';
 
 					//Distance parcourue
 					if (latOld == 0 || longOld == 0) {
-						$(".distance").html("0");
+						$(".distance").html("<h5>0</h5>");
 					}
 					else if (lat != latOld || long != longOld){
 						//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
@@ -313,10 +326,10 @@ include 'includes/header.inc';
 						cptDist++;
 					}
 					if(total < 1000) {
-						$(".distance").html(total.toFixed(0) + " Mètres");
+						$(".distance").html("<h5>"+total.toFixed(0)+"</h5>");
 					}
 					else {
-						$(".distance").html(totalKM.toFixed(1) + " KM");
+						$(".distance").html("<h5>"+totalKM.toFixed(1)+"</h5>");
 					}
 					latOld = lat;
 					longOld = long;
@@ -330,14 +343,14 @@ include 'includes/header.inc';
 					sec = $(".durée").html().substring(6,8);
 					console.log(hr + "&"+ min + "&" + sec);
 					var allure = calculatePace(total, hr, min,sec);
-					$(".allure").html(allure + " KM/Min");
+					$(".allure").html("<h5>"+allure+ "</h5>");
 
 					// altitude act, min, max, moy
 					alt = geolocation.getAltitude() || 0;
-					$(".alt").html(alt.toFixed(0));
-					$(".altmax").html(altmax.toFixed(0));
-					$(".altmin").html(altmin.toFixed(0));
-					$(".altmoy").html(altmoy.toFixed(0));
+					$(".alt").html("<h5>"+alt.toFixed(0)+"</h5");
+					$(".altmax").html("<h5>"+altmax.toFixed(0)+"</h5");
+					$(".altmin").html("<h5>"+altmin.toFixed(0)+"</h5");
+					$(".altmoy").html("<h5>"+altmoy.toFixed(0)+"</h5");
 					if (altmin > alt){
 						altmin = alt;
 					}
@@ -374,6 +387,7 @@ include 'includes/header.inc';
 							direction: geolocation.getHeading() || 0,
 							altitude: alt || 0,
 							vitesse: speed || 0,
+							chrono: $(".durée").html(),
 						},
 						function(data) {
 							tabDate.push(data);
@@ -449,7 +463,7 @@ include 'includes/header.inc';
 					function(data) {
 					}
 				);
-				var chrono = $(".durée").html();
+				chrono = $(".durée").html();
 				$.post('actions/insertperformance.php',
 					{
 						etat: etat,
@@ -465,13 +479,13 @@ include 'includes/header.inc';
 
 
 			timerInstance.addEventListener('secondsUpdated', function (e) {
-    			$('.durée').html(timerInstance.getTimeValues().toString());
+    			$('.durée').html("<h5>"+timerInstance.getTimeValues().toString()+"</h5>");
 			});
 			timerInstance.addEventListener('started', function (e) {
-    			$('.durée').html(timerInstance.getTimeValues().toString());
+    			$('.durée').html("<h5>"+timerInstance.getTimeValues().toString()+"</h5>");
 			});
 			timerInstance.addEventListener('reset', function (e) {
-			    $('.durée').html(timerInstance.getTimeValues().toString());
+			    $('.durée').html("<h5>"+timerInstance.getTimeValues().toString()+"</h5>");
 			});
 
 		</script>

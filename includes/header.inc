@@ -165,7 +165,7 @@ $(document).ready(function() {
         if(json.reponse === 'ok') {
           // On peut aussi rediriger vers l'index
           window.location.href =  window.location.href;
-          $("#fail").html("<p>Ok...</p>");
+          $("#fail").html("<p>Connection...</p>");
         } else {
           $("#fail").html("<p>Erreur lors de la connexion...</p>");
         }

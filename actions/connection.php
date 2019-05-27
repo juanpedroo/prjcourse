@@ -3,10 +3,12 @@
     include('../includes/connect.inc');
     $idc = connect();
 
+    $pwd = $_POST['password'];
+    $pwd = password_hash($pwd, PASSWORD_DEFAULT);
 
     if( isset($_POST['email']) && isset($_POST['password']) )
     {
-      
+
       $sql1= "select id_individu, prenom_p, organisateur from individu where mail_p= '".$_POST['email']."' AND mdp_p = crypt('".$_POST['password']."',mdp_p)";
       $result=pg_query($idc,$sql1);
       while($ligne = pg_fetch_assoc($result)) {
