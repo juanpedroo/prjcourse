@@ -59,19 +59,42 @@ $idc = connect();
 		<div id="etat" class = "centre"></div>
 		<div id ="carte" class ="carte"></div>
 
-		<div id="stats"class="row stats">
-	        <div id="durée" class="durée col-md-offset-1 col-md-1 center-text">00:00:00</div>
-	        <div id="distance" class="distance col-md-1 center-text">0.00 KM</div>
-	        <div id="allure" class="allure col-md-1 center-text">00"00</div>
-	        <div id="vitesse" class="vitesse col-md-1 center-text">0</div>
-	        <div id="vmax" class="vmax col-md-1 center-text">0</div>
-	        <div id="vmin" class="vmin col-md-1 center-text">0</div>
-	        <div id="vmoy" class="vmoy col-md-1 center-text">0</div>
-			<div id="alt" class="alt col-md-1 center-text">0</div>
-	        <div id="altmin" class="altmin col-md-1 center-text">0</div>
-	        <div id="altmax" class="altmax col-md-1 center-text">0</div>
-	        <div id="altmoy" class="altmoy col-md-1 center-text">0</div>
-    	</div>
+		<div class="row stats-gen-libelle">
+		   <div class="col-md-4 center-text">Durée <i class="far fa-clock"></i></div>
+		   <div class="col-md-4 center-text">Distance <i class="fas fa-ruler-horizontal"></i></div>
+		   <div class="col-md-4 center-text">Allure <i class="fas fa-running"></i></div>
+   		</div>
+		<div class="row stats-gen">
+		   <div id="durée" class="durée col-md-4 center-text"><h5>00:00:00</h5></div>
+		   <div id="distance" class="distance col-md-4 center-text"><h5>0 m</h5></div>
+		   <div id="allure" class="allure col-md-4 center-text"><h5>00"00</h5></div>
+   		</div>
+		<br>
+		<div class="row stats-vitesse-libelle">
+		   <div class="col-md-3 center-text">Vitesse <img src="styles/speedometer.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Max <img src="styles/fast.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Min <img src="styles/slow.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Moy <img src="styles/speedometer_avg.svg" height="20px" width="20px"></div>
+   		</div>
+   		<div class="row stats-vitesse">
+		   <div id="vitesse" class="vitesse col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vmax" class="vmax col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vmin" class="vmin col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vmoy" class="vmoy col-md-3 center-text"><h5>0 km/h</h5></div>
+   		</div>
+		<br>
+		<div class="row stats-altitude-libelle">
+		   <div class="col-md-3 center-text">Altitude <i class="fa fa-tachometer-alt"></i></div>
+		   <div class="col-md-3 center-text">Altitude Min <i class="fas fa-arrow-down"></i></div>
+		   <div class="col-md-3 center-text">Altitude Max <i class="fas fa-arrow-up"></i></div>
+		   <div class="col-md-3 center-text">Altitude Moy <i class="fas fa-arrow-right"></i></div>
+	   	</div>
+	   	<div class="row stats-altitude">
+		   <div id="alt" class="alt col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="altmin" class="altmin col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="altmax" class="altmax col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="altmoy" class="altmoy col-md-3 center-text"><h5>0 m</h5></div>
+	   	</div>
         <script>
 			function calcCrow(lat1, lon1, lat2, lon2)
 			{
@@ -199,16 +222,28 @@ $idc = connect();
 				points = [];
 				id_individu = parseInt(option);
 				temps = [];
+				$(".durée").html("00:00:00");
+				$(".distance").html("0 m");
+				$(".allure").html('00"00');
+				$(".vitesse").html("0 km/h");
+				$(".vmax").html("0 km/h");
+				$(".vmin").html("0 km/h");
+				$(".vmoy").html("0 km/h");
+				$(".alt").html("0 m");
+				$(".altmin").html("0 m");
+				$(".altmax").html("0 m");
+				$(".altmoy").html("0 m");
+				trackFeature = new ol.Feature({
+					geometry: new ol.geom.LineString([])
+				});
+				trackLayer = new ol.layer.Vector({
+					source: new ol.source.Vector({
+						features: [trackFeature]
+					}),
+					style: trackStyle
+				});
 			}
 			function recupDonnees() {
-				// $.post('./actions/check_online.php',
-				// 	{
-				// 		id_individu : id_individu
-				// 	},
-				// 	function (data) {
-				//
-				// 	}
-				// );
 				$.post('./actions/get_online.php',
 	                {
 					    option: id_individu,
@@ -309,7 +344,6 @@ $idc = connect();
 						}
 						else {
 							$("#etat").html("Hors-ligne");
-
 						}
 					}
 	        	);

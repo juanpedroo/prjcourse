@@ -38,32 +38,42 @@ include 'includes/header.inc';
 			<div class="col-md-3"></div>
 		</div>
 
-		<div id="stats"class="row libelle-stats">
-	        <div class="col-md-offset-1 col-md-1 center-text">Durée</div>
-	        <div class="col-md-1 center-text">Distance</div>
-	        <div class="col-md-1 center-text">Allure</div>
-	        <div class="col-md-1 center-text">Vitesse</div>
-	        <div class="col-md-1 center-text">Vitesse Max</div>
-	        <div class="col-md-1 center-text">Vitesse Min</div>
-	        <div class="col-md-1 center-text">Vitesse Moy</div>
-			<div class="col-md-1 center-text">Altitude</div>
-	        <div class="col-md-1 center-text">Altitude Min</div>
-	        <div class="col-md-1 center-text">Altitude Max</div>
-	        <div class="col-md-1 center-text">Altitude Moy</div>
-    	</div>
-		<div id="stats"class="row data-stats">
-	        <div id="durée" class="durée col-md-offset-1 col-md-1 center-text"></div>
-	        <div id="distance" class="distance col-md-1 center-text"></div>
-	        <div id="allure" class="allure col-md-1 center-text"></div>
-	        <div id="vitesse" class="vitesse col-md-1 center-text"></div>
-	        <div id="vmax" class="vmax col-md-1 center-text"></div>
-	        <div id="vmin" class="vmin col-md-1 center-text"></div>
-	        <div id="vmoy" class="vmoy col-md-1 center-text"></div>
-			<div id="alt" class="alt col-md-1 center-text"></div>
-	        <div id="altmin" class="altmin col-md-1 center-text"></div>
-	        <div id="altmax" class="altmax col-md-1 center-text"></div>
-	        <div id="altmoy" class="altmoy col-md-1 center-text"></div>
-    	</div>
+		<div class="row stats-gen-libelle">
+		   <div class="col-md-4 center-text">Durée <i class="far fa-clock"></i></div>
+		   <div class="col-md-4 center-text">Distance <i class="fas fa-ruler-horizontal"></i></div>
+		   <div class="col-md-4 center-text">Allure <i class="fas fa-running"></i></div>
+   		</div>
+		<div class="row stats-gen">
+		   <div id="durée" class="durée col-md-4 center-text"><h5>00:00:00</h5></div>
+		   <div id="distance" class="distance col-md-4 center-text"><h5>0 m</h5></div>
+		   <div id="allure" class="allure col-md-4 center-text"><h5>00"00</h5></div>
+   		</div>
+		<br>
+		<div class="row stats-vitesse-libelle">
+		   <div class="col-md-3 center-text">Vitesse <img src="styles/speedometer.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Max <img src="styles/fast.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Min <img src="styles/slow.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Moy <img src="styles/speedometer_avg.svg" height="20px" width="20px"></div>
+   		</div>
+   		<div class="row stats-vitesse">
+		   <div id="vitesse" class="vitesse col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vmax" class="vmax col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vmin" class="vmin col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vmoy" class="vmoy col-md-3 center-text"><h5>0 km/h</h5></div>
+   		</div>
+		<br>
+		<div class="row stats-altitude-libelle">
+		   <div class="col-md-3 center-text">Altitude <i class="fa fa-tachometer-alt"></i></div>
+		   <div class="col-md-3 center-text">Altitude Min <i class="fas fa-arrow-down"></i></div>
+		   <div class="col-md-3 center-text">Altitude Max <i class="fas fa-arrow-up"></i></div>
+		   <div class="col-md-3 center-text">Altitude Moy <i class="fas fa-arrow-right"></i></div>
+	   	</div>
+	   	<div class="row stats-altitude">
+		   <div id="alt" class="alt col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="altmin" class="altmin col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="altmax" class="altmax col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="altmoy" class="altmoy col-md-3 center-text"><h5>0 m</h5></div>
+	   	</div>
 		<br>
 		<div class="row bouttons">
 			<div id="start" class="start col-md-3">
@@ -73,7 +83,9 @@ include 'includes/header.inc';
 			</div>
 			<div id="pause" class="pause col-md-6">
 				<button type="button" class="btn btn-warning btn-circle btn-xl">
-					<i class="fa fa-pause"></i>
+					<span style="color: white;">
+  						<i class="fa fa-pause"></i>
+					</span>
                 </button>
 			</div>
 			<div id="stop" class="stop col-md-3">
@@ -189,7 +201,7 @@ include 'includes/header.inc';
 				zoom: 19,
 				maxZoom: 23,
 			});
-			// Carte avec un fonds de carte
+			// Carte avec un fond de carte
 			var map = new ol.Map({
 				layers: [baseLayer, trackLayer],
 				target: 'carte',
@@ -296,10 +308,10 @@ include 'includes/header.inc';
 					// On affiche les stats sur la page
 					// vitesse instant vmax et vmin et vmoy
 					speed = 3.6 * geolocation.getSpeed() || 0;
-					$(".vitesse").html(speed.toFixed(2));
-					$(".vmax").html("<h5>"+vmax.toFixed(2)+"</h5");
-					$(".vmin").html("<h5>"+vmin.toFixed(2)+"</h5");
-					$(".vmoy").html("<h5>"+vmoy.toFixed(2)+"</h5");
+					$(".vitesse").html("<h4>"+ speed.toFixed(2) + " km/h</h4>");
+					$(".vmax").html("<h4>"+vmax.toFixed(2)+" km/h</h4");
+					$(".vmin").html("<h4>"+vmin.toFixed(2)+" km/h</h4");
+					$(".vmoy").html("<h4>"+vmoy.toFixed(2)+" km/h</h4");
 					if (vmin > speed){
 						vmin = speed;
 					}
@@ -316,7 +328,7 @@ include 'includes/header.inc';
 
 					//Distance parcourue
 					if (latOld == 0 || longOld == 0) {
-						$(".distance").html("<h5>0</h5>");
+						$(".distance").html("<h4>0 m</h4>");
 					}
 					else if (lat != latOld || long != longOld){
 						//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
@@ -326,31 +338,31 @@ include 'includes/header.inc';
 						cptDist++;
 					}
 					if(total < 1000) {
-						$(".distance").html("<h5>"+total.toFixed(0)+"</h5>");
+						$(".distance").html("<h4>"+total.toFixed(0)+" m</h4>");
 					}
 					else {
-						$(".distance").html("<h5>"+totalKM.toFixed(1)+"</h5>");
+						$(".distance").html("<h4>"+totalKM.toFixed(1)+" km</h4>");
 					}
 					latOld = lat;
 					longOld = long;
 
 					//allure
 					//hr = parseInt($(".durée").html().substring(0,3));
-					hr = $(".durée").html().substring(0,2);
+					hr = $(".durée").html().substring(4,6);
 					//min = parseInt($(".durée").html().substring(3,5));
-					min = $(".durée").html().substring(3,5);
+					min = $(".durée").html().substring(7,9);
 					//sec = parseInt($(".durée").html().substring(6,8));
-					sec = $(".durée").html().substring(6,8);
+					sec = $(".durée").html().substring(10,12);
 					console.log(hr + "&"+ min + "&" + sec);
 					var allure = calculatePace(total, hr, min,sec);
-					$(".allure").html("<h5>"+allure+ "</h5>");
+					$(".allure").html("<h4>"+allure+ "</h4>");
 
 					// altitude act, min, max, moy
 					alt = geolocation.getAltitude() || 0;
-					$(".alt").html("<h5>"+alt.toFixed(0)+"</h5");
-					$(".altmax").html("<h5>"+altmax.toFixed(0)+"</h5");
-					$(".altmin").html("<h5>"+altmin.toFixed(0)+"</h5");
-					$(".altmoy").html("<h5>"+altmoy.toFixed(0)+"</h5");
+					$(".alt").html("<h4>"+alt.toFixed(0)+" m</h4");
+					$(".altmax").html("<h4>"+altmax.toFixed(0)+" m</h4");
+					$(".altmin").html("<h4>"+altmin.toFixed(0)+" m</h4");
+					$(".altmoy").html("<h4>"+altmoy.toFixed(0)+" m</h4");
 					if (altmin > alt){
 						altmin = alt;
 					}
@@ -387,7 +399,7 @@ include 'includes/header.inc';
 							direction: geolocation.getHeading() || 0,
 							altitude: alt || 0,
 							vitesse: speed || 0,
-							chrono: $(".durée").html(),
+							chrono: timerInstance.getTimeValues().toString(),
 						},
 						function(data) {
 							tabDate.push(data);
@@ -479,13 +491,13 @@ include 'includes/header.inc';
 
 
 			timerInstance.addEventListener('secondsUpdated', function (e) {
-    			$('.durée').html("<h5>"+timerInstance.getTimeValues().toString()+"</h5>");
+    			$('.durée').html("<h4>"+timerInstance.getTimeValues().toString()+"</h4>");
 			});
 			timerInstance.addEventListener('started', function (e) {
-    			$('.durée').html("<h5>"+timerInstance.getTimeValues().toString()+"</h5>");
+    			$('.durée').html("<h4>"+timerInstance.getTimeValues().toString()+"</h4>");
 			});
 			timerInstance.addEventListener('reset', function (e) {
-			    $('.durée').html("<h5>"+timerInstance.getTimeValues().toString()+"</h5>");
+			    $('.durée').html("<h4>"+timerInstance.getTimeValues().toString()+"</h4>");
 			});
 
 		</script>
