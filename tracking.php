@@ -213,7 +213,7 @@ $idc = connect();
 			}));
 
 			//Obtention des infos de tracking
-			// var id_point = 0;
+			var id_point = 0;
 			// var coordonnees = [];
 
 			function showOnline(option) {
@@ -252,7 +252,7 @@ $idc = connect();
 					},
 	                function (data) {
 	                    // Décode du JSON le résultat
-						if (id_individu != 0 && data != "Offline") {
+						if (id_individu != 0 && data != "Offline" && data != "false") {
 							JSON.parse(data).forEach((ligne) => {
 								// console.log(ligne);
 								coordonnees[0] = (parseFloat(ligne.longitude));
@@ -358,6 +358,7 @@ $idc = connect();
 				map: map,
 				source: sourceVecteur
 			});
+
 			setInterval("recupDonnees()",5000);
 
         </script>

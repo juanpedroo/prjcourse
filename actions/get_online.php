@@ -26,13 +26,12 @@ $ligne = pg_fetch_assoc($rs);
         $result = pg_query($idc, $sql);
 
         // Retourne le tableau des résultats encodé en JSON
-
         echo json_encode(pg_fetch_all($result));
     }
     else {
         echo ("Offline");
     }
-
+    
 }
 
 ?>

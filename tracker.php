@@ -20,6 +20,7 @@ include 'includes/header.inc';
 		<script src="lib/ol3/ol.js"></script>
 		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
 		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<script src="cookie.js"></script>
 
 		<style>
 			.carte {
@@ -44,9 +45,9 @@ include 'includes/header.inc';
 		   <div class="col-md-4 center-text">Allure <i class="fas fa-running"></i></div>
    		</div>
 		<div class="row stats-gen">
-		   <div id="durée" class="durée col-md-4 center-text"><h5>00:00:00</h5></div>
-		   <div id="distance" class="distance col-md-4 center-text"><h5>0 m</h5></div>
-		   <div id="allure" class="allure col-md-4 center-text"><h5>00"00</h5></div>
+		   <div id="durée" class="durée col-md-4 center-text"><h4>00:00:00</h4></div>
+		   <div id="distance" class="distance col-md-4 center-text"><h4>0 m</h4></div>
+		   <div id="allure" class="allure col-md-4 center-text"><h4>00"00</h4></div>
    		</div>
 		<br>
 		<div class="row stats-vitesse-libelle">
@@ -56,10 +57,10 @@ include 'includes/header.inc';
 		   <div class="col-md-3 center-text">Vitesse Moy <img src="styles/speedometer_avg.svg" height="20px" width="20px"></div>
    		</div>
    		<div class="row stats-vitesse">
-		   <div id="vitesse" class="vitesse col-md-3 center-text"><h5>0 km/h</h5></div>
-		   <div id="vmax" class="vmax col-md-3 center-text"><h5>0 km/h</h5></div>
-		   <div id="vmin" class="vmin col-md-3 center-text"><h5>0 km/h</h5></div>
-		   <div id="vmoy" class="vmoy col-md-3 center-text"><h5>0 km/h</h5></div>
+		   <div id="vitesse" class="vitesse col-md-3 center-text"><h4>0 km/h</h4></div>
+		   <div id="vmax" class="vmax col-md-3 center-text"><h4>0 km/h</h4></div>
+		   <div id="vmin" class="vmin col-md-3 center-text"><h4>0 km/h</h4></div>
+		   <div id="vmoy" class="vmoy col-md-3 center-text"><h4>0 km/h</h4></div>
    		</div>
 		<br>
 		<div class="row stats-altitude-libelle">
@@ -69,10 +70,10 @@ include 'includes/header.inc';
 		   <div class="col-md-3 center-text">Altitude Moy <i class="fas fa-arrow-right"></i></div>
 	   	</div>
 	   	<div class="row stats-altitude">
-		   <div id="alt" class="alt col-md-3 center-text"><h5>0 m</h5></div>
-		   <div id="altmin" class="altmin col-md-3 center-text"><h5>0 m</h5></div>
-		   <div id="altmax" class="altmax col-md-3 center-text"><h5>0 m</h5></div>
-		   <div id="altmoy" class="altmoy col-md-3 center-text"><h5>0 m</h5></div>
+		   <div id="alt" class="alt col-md-3 center-text"><h4>0 m</h4></div>
+		   <div id="altmin" class="altmin col-md-3 center-text"><h4>0 m</h4></div>
+		   <div id="altmax" class="altmax col-md-3 center-text"><h4>0 m</h4></div>
+		   <div id="altmoy" class="altmoy col-md-3 center-text"><h4>0 m</h4></div>
 	   	</div>
 		<br>
 		<div class="row bouttons">
@@ -264,6 +265,7 @@ include 'includes/header.inc';
 					dateFin = 0;
 					dateDeb = 0;
 					etat = "";
+					allureCalc=0;
 				}
 				online = "connecte";
 				$.post('actions/setonline.php',
@@ -354,8 +356,8 @@ include 'includes/header.inc';
 					//sec = parseInt($(".durée").html().substring(6,8));
 					sec = $(".durée").html().substring(10,12);
 					console.log(hr + "&"+ min + "&" + sec);
-					var allure = calculatePace(total, hr, min,sec);
-					$(".allure").html("<h4>"+allure+ "</h4>");
+					allureCalc = calculatePace(total, hr, min,sec);
+					$(".allure").html("<h4>"+allureCalc+ "</h4>");
 
 					// altitude act, min, max, moy
 					alt = geolocation.getAltitude() || 0;
@@ -434,18 +436,6 @@ include 'includes/header.inc';
 					map: map,
 					source: sourceVecteur
 				});
-
-				// Zoom sur l'emprise du vecteur
-				// sourceVecteur.once('change', function(evt){
-				// // On vérifie que la source du vecteur sont chargés
-				// if (sourceVecteur.getState() === 'ready') {
-				// 	// On vérifie que le veteur contient au moins un objet géographique
-				// 	if (sourceVecteur.getFeatures().length >0) {
-				// 		// On adapte la vue de la carte à l'emprise du vecteur
-				// 		map.getView().fit(sourceVecteur.getExtent(), map.getSize());
-				// 	}
-				// }
-				// });
 			});
 
 			$( "#pause" ).click(function() {
@@ -468,6 +458,10 @@ include 'includes/header.inc';
 				online = "deconnecte";
 				dateFin = tabDate[tabDate.length-1];
 				dateDeb = tabDate[0];
+				hr1 = $(".durée").html().substring(4,6);
+				min1 = $(".durée").html().substring(7,9);
+				sec1 = $(".durée").html().substring(10,12);
+				chronoRaw = (hr1+":"+min1+":"+sec1);
 				$.post('actions/setonline.php',
 					{
 						online: online,
@@ -481,15 +475,39 @@ include 'includes/header.inc';
 						etat: etat,
 						dateFin : dateFin,
 						dateDeb : dateDeb,
-						chrono : chrono,
-
+						chrono : chronoRaw,
 					},
 					function(data) {
 					}
 				);
+				// Vérification qu'une performance a bien été enregistrée
+				if (dateFin != null) {
+					// Boite de dialogue
+					var msg = "Félicitations !\nVous allez maintenant être"
+					 	     +" redirigé vers le résumé de vos performances.";
+					if (confirm(msg)) {
+		    			// Code à éxécuter si le l'utilisateur clique sur "OK"
+						creerCookie('tabSpeed',tabSpeed,1);
+						creerCookie('tabAlt',tabAlt,1);
+						creerCookie('allure',allureCalc,1);
+						creerCookie('distanceTot',totalKM,1);
+						hr1 = $(".durée").html().substring(4,6);
+						min1 = $(".durée").html().substring(7,9);
+						sec1 = $(".durée").html().substring(10,12);
+						chronoRaw = (hr1+":"+min1+":"+sec1);
+						creerCookie('duree',chronoRaw,1);
+						creerCookie('distance',distance,1);
+
+						window.location.replace("resultattrack.php");
+					}
+					else {
+
+					}
+				}
+
 			});
 
-
+			// Timer
 			timerInstance.addEventListener('secondsUpdated', function (e) {
     			$('.durée').html("<h4>"+timerInstance.getTimeValues().toString()+"</h4>");
 			});

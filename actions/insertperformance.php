@@ -8,12 +8,10 @@ $dDeb = $_POST['dateDeb'];
 // $dFin = $_POST['dateFin'];
 // $chrono = $_POST['chrono'];
 $etat = $_POST['etat'];
-$id_user = $_SESSION['individu'];
+$id_user = intval($_SESSION['individu']);
 
 
-$sqlPointDeb = "SELECT id_point
-                FROM public.point where id_individu = $id_user
-                and dateheure = '$dDeb'";
+$sqlPointDeb = "SELECT id_point FROM public.point where id_individu = $id_user and dateheure = '$dDeb'";
 $result = pg_query($idc, $sqlPointDeb);
 $pointDebut = pg_fetch_row($result);
 
