@@ -156,8 +156,10 @@ $idc = connect();
 			altmax = alt;
 			altmin = 9999;
 			altmoy = 0;
+			cpt=0;
 
 
+			
 			var id_individu = 0;
 			// create a style to display our position history (track)
 			var trackStyle = new ol.style.Style({
@@ -177,7 +179,7 @@ $idc = connect();
 					features: [trackFeature]
 				}),
 				style: trackStyle
-				});
+			});
 
 			var baseLayer = new ol.layer.Tile({
 				source: new ol.source.OSM()
@@ -233,17 +235,18 @@ $idc = connect();
 				$(".altmin").html("0 m");
 				$(".altmax").html("0 m");
 				$(".altmoy").html("0 m");
+
+
+
+				// Raz de trackfeature
+				trackLayer.getSource().removeFeature(trackFeature);
 				trackFeature = new ol.Feature({
 					geometry: new ol.geom.LineString([])
 				});
-				trackLayer = new ol.layer.Vector({
-					source: new ol.source.Vector({
-						features: [trackFeature]
-					}),
-					style: trackStyle
-				});
+				trackLayer.getSource().addFeature(trackFeature);
 			}
 			function recupDonnees() {
+
 				$.post('./actions/get_online.php',
 	                {
 					    option: id_individu,
@@ -253,6 +256,7 @@ $idc = connect();
 	                function (data) {
 	                    // Décode du JSON le résultat
 						if (id_individu != 0 && data != "Offline" && data != "false") {
+
 							JSON.parse(data).forEach((ligne) => {
 								// console.log(ligne);
 								coordonnees[0] = (parseFloat(ligne.longitude));

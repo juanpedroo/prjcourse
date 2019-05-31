@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 include 'includes/header.inc';
 ?>
@@ -190,7 +190,7 @@ include 'includes/header.inc';
 					features: [trackFeature]
 				}),
 				style: trackStyle
-				});
+			});
 
 			var baseLayer = new ol.layer.Tile({
 				source: new ol.source.OSM()
@@ -235,6 +235,14 @@ include 'includes/header.inc';
 			});
 
 			$( "#start" ).click(function() {
+
+				trackLayer.getSource().removeFeature(trackFeature);
+				trackFeature = new ol.Feature({
+					geometry: new ol.geom.LineString([])
+				});
+				trackLayer.getSource().addFeature(trackFeature);
+
+
   				//actions
 				if (online = "deconnecte") {
 					cpt = 0;
@@ -275,6 +283,10 @@ include 'includes/header.inc';
 					function(data) {
 					}
 				);
+
+
+
+
 				timerInstance.start();
 				etat = "start";
 
@@ -419,7 +431,15 @@ include 'includes/header.inc';
 
 						}
 					);
-
+				// Source du vecteur contenant l'objet géographique
+				sourceVecteur = new ol.source.Vector({
+						features: [ObjPosition]
+				});
+				// Couche vectorielle
+				vecteur = new ol.layer.Vector({
+					map: map,
+					source: sourceVecteur
+				});
 
 				});
 
@@ -427,15 +447,7 @@ include 'includes/header.inc';
 				geolocation.on('error', function(erreur) {
 					alert('Echec de la géolocalisation : ' +erreur.message);
 				});
-				// Source du vecteur contenant l'objet géographique
-				var sourceVecteur = new ol.source.Vector({
-						features: [ObjPosition]
-				});
-				// Couche vectorielle
-				var vecteur = new ol.layer.Vector({
-					map: map,
-					source: sourceVecteur
-				});
+
 			});
 
 			$( "#pause" ).click(function() {
