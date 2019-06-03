@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'includes/header.inc';
+include 'include/header.inc';
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,18 +8,18 @@ include 'includes/header.inc';
 		<title>Zoom sur la géolocalisation</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     	<meta charset="utf-8">
-		<link rel="stylesheet" href="lib/ol3/ol.css" type="text/css">
+		<link rel="stylesheet" href="libs/ol3/ol.css" type="text/css">
 		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="lib/bootstrap/css/bouton-cercle.css">
-		<link rel="stylesheet" href="styles/navbar.css">
-		<link rel="stylesheet" href="styles/centerdiv.css">
-		<link rel="stylesheet" href = "lib/fontawesome/css/all.min.css">
-		<script src="lib/easytimer/easytimer.min.js"></script>
-		<script src="lib/ol3/ol.js"></script>
-		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
-		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="libs/bootstrap/css/bouton-cercle.css">
+		<link rel="stylesheet" href="css/navbar.css">
+		<link rel="stylesheet" href="css/centerdiv.css">
+		<link rel="stylesheet" href = "libs/fontawesome/css/all.min.css">
+		<script src="libs/easytimer/easytimer.min.js"></script>
+		<script src="libs/ol3/ol.js"></script>
+		<script src="libs/jquery/jquery-3.3.1.min.js"></script>
+		<script src="libs/bootstrap/js/bootstrap.min.js"></script>
 		<script src="cookie.js"></script>
 
 		<style>
@@ -51,10 +51,10 @@ include 'includes/header.inc';
    		</div>
 		<br>
 		<div class="row stats-vitesse-libelle">
-		   <div class="col-md-3 center-text">Vitesse <img src="styles/speedometer.svg" height="20px" width="20px"></div>
-		   <div class="col-md-3 center-text">Vitesse Max <img src="styles/fast.svg" height="20px" width="20px"></div>
-		   <div class="col-md-3 center-text">Vitesse Min <img src="styles/slow.svg" height="20px" width="20px"></div>
-		   <div class="col-md-3 center-text">Vitesse Moy <img src="styles/speedometer_avg.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse <img src="css/speedometer.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Max <img src="css/fast.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Min <img src="css/slow.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Moy <img src="css/speedometer_avg.svg" height="20px" width="20px"></div>
    		</div>
    		<div class="row stats-vitesse">
 		   <div id="vitesse" class="vitesse col-md-3 center-text"><h4>0 km/h</h4></div>
@@ -243,7 +243,7 @@ include 'includes/header.inc';
 				trackLayer.getSource().addFeature(trackFeature);
 
 
-  				//actions
+  				//requetes
 				if (online = "deconnecte") {
 					cpt = 0;
 					cptDist = 0;
@@ -276,7 +276,7 @@ include 'includes/header.inc';
 					allureCalc=0;
 				}
 				online = "connecte";
-				$.post('actions/setonline.php',
+				$.post('requetes/setonline.php',
 					{
 						online: online,
 					},
@@ -296,7 +296,7 @@ include 'includes/header.inc';
 				geolocation.on('change', function(evt) {
 
 					online = "connecte";
-					$.post('actions/setonline.php',
+					$.post('requetes/setonline.php',
 						{
 							online: online,
 						},
@@ -403,7 +403,7 @@ include 'includes/header.inc';
 					}
 					cpt++;
 					// Envoi des infos de géolocalisation
-					$.post('actions/insertgeocoord.php',
+					$.post('requetes/insertgeocoord.php',
 						{
 
 							type_point: type_point,
@@ -418,7 +418,7 @@ include 'includes/header.inc';
 						function(data) {
 							tabDate.push(data);
 							if (tabDate.length < 2) {
-								$.post('actions/insertperformance.php',
+								$.post('requetes/insertperformance.php',
 									{
 										etat: etat,
 										dateDeb : tabDate[0],
@@ -454,7 +454,7 @@ include 'includes/header.inc';
 				timerInstance.pause();
 				geolocation.setTracking(false);
 				online = "pause";
-				$.post('actions/setonline.php',
+				$.post('requetes/setonline.php',
 					{
 						online: online,
 					},
@@ -474,7 +474,7 @@ include 'includes/header.inc';
 				min1 = $(".durée").html().substring(7,9);
 				sec1 = $(".durée").html().substring(10,12);
 				chronoRaw = (hr1+":"+min1+":"+sec1);
-				$.post('actions/setonline.php',
+				$.post('requetes/setonline.php',
 					{
 						online: online,
 					},
@@ -482,7 +482,7 @@ include 'includes/header.inc';
 					}
 				);
 				chrono = $(".durée").html();
-				$.post('actions/insertperformance.php',
+				$.post('requetes/insertperformance.php',
 					{
 						etat: etat,
 						dateFin : dateFin,

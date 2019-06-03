@@ -7,10 +7,10 @@
 <title>Association</title>
 <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="styles/navbar.css">
-<script src="lib/jquery/jquery-3.3.1.min.js"></script>
-<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/navbar.css">
+<script src="libs/jquery/jquery-3.3.1.min.js"></script>
+<script src="libs/bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 	// Prevent dropdown menu from closing when click inside the form
@@ -22,7 +22,7 @@
 <body>
     <?php
 		session_start();
-        include 'includes/header.inc';
+        include 'include/header.inc';
         $nomassoc = "";
         $adrassoc = "";
         $cpassoc = "";
@@ -30,7 +30,7 @@
         $descrassoc = "";
         $telassoc = "";
         $dirassoc = "";
-        include('./includes/connect.inc');
+        include('./include/connect.inc');
         $idc = connect();
 
         $sql = 'select nom_asso, adresse_asso, cp_asso, ville_asso, description_asso,tel_asso, nom_directeur_asso from association where asso_check = true';

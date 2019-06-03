@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('includes/header.inc');
-include('./includes/connect.inc');
+include('include/header.inc');
+include('./include/connect.inc');
 $idc = connect();
 ?>
 <!DOCTYPE html>
@@ -10,18 +10,18 @@ $idc = connect();
 		<title>TRacking des participants</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     	<meta charset="utf-8">
-		<link rel="stylesheet" href="lib/ol3/ol.css" type="text/css">
+		<link rel="stylesheet" href="libs/ol3/ol.css" type="text/css">
 		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="lib/bootstrap/css/bouton-cercle.css">
-		<link rel="stylesheet" href="styles/navbar.css">
-		<link rel="stylesheet" href="styles/centerdiv.css">
-		<link rel="stylesheet" href = "lib/fontawesome/css/all.min.css">
-		<script src="lib/easytimer/easytimer.min.js"></script>
-		<script src="lib/ol3/ol.js"></script>
-		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
-		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="libs/bootstrap/css/bouton-cercle.css">
+		<link rel="stylesheet" href="css/navbar.css">
+		<link rel="stylesheet" href="css/centerdiv.css">
+		<link rel="stylesheet" href = "libs/fontawesome/css/all.min.css">
+		<script src="libs/easytimer/easytimer.min.js"></script>
+		<script src="libs/ol3/ol.js"></script>
+		<script src="libs/jquery/jquery-3.3.1.min.js"></script>
+		<script src="libs/bootstrap/js/bootstrap.min.js"></script>
 
 		<style>
 			.carte {
@@ -71,10 +71,10 @@ $idc = connect();
    		</div>
 		<br>
 		<div class="row stats-vitesse-libelle">
-		   <div class="col-md-3 center-text">Vitesse <img src="styles/speedometer.svg" height="20px" width="20px"></div>
-		   <div class="col-md-3 center-text">Vitesse Max <img src="styles/fast.svg" height="20px" width="20px"></div>
-		   <div class="col-md-3 center-text">Vitesse Min <img src="styles/slow.svg" height="20px" width="20px"></div>
-		   <div class="col-md-3 center-text">Vitesse Moy <img src="styles/speedometer_avg.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse <img src="css/speedometer.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Max <img src="css/fast.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Min <img src="css/slow.svg" height="20px" width="20px"></div>
+		   <div class="col-md-3 center-text">Vitesse Moy <img src="css/speedometer_avg.svg" height="20px" width="20px"></div>
    		</div>
    		<div class="row stats-vitesse">
 		   <div id="vitesse" class="vitesse col-md-3 center-text"><h5>0 km/h</h5></div>
@@ -247,7 +247,7 @@ $idc = connect();
 			}
 			function recupDonnees() {
 
-				$.post('./actions/get_online.php',
+				$.post('./requetes/get_online.php',
 	                {
 					    option: id_individu,
 					    id_point: id_point,

@@ -2,7 +2,7 @@
     session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8">
@@ -11,10 +11,10 @@
     <title>Ajout Association</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles/navbar.css">
-    <script src="lib/jquery/jquery-3.3.1.min.js"></script>
-	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <script src="libs/jquery/jquery-3.3.1.min.js"></script>
+	<script src="libs/bootstrap/js/bootstrap.min.js"></script>
 
 
 
@@ -50,8 +50,8 @@
 
 <body>
 	<?php
-        include('includes/header.inc');
-        include('./includes/connect.inc');
+        include('include/header.inc');
+        include('./include/connect.inc');
         $idc = connect();
     ?>
 	<br>
