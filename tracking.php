@@ -159,7 +159,7 @@ $idc = connect();
 			cpt=0;
 
 
-			
+
 			var id_individu = 0;
 			// create a style to display our position history (track)
 			var trackStyle = new ol.style.Style({
@@ -272,7 +272,7 @@ $idc = connect();
 								// On affiche les stats sur la page
 								$(".durée").html(temps[temps.length-1]);
 								// vitesse instant vmax et vmin et vmoy
-								speed = 3.6 * parseFloat(ligne.vitesse);
+								speed = parseFloat(ligne.vitesse);
 								$(".vitesse").html(speed.toFixed(2));
 								$(".vmax").html(vmax.toFixed(2));
 								$(".vmin").html(vmin.toFixed(2));
