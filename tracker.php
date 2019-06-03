@@ -17,8 +17,9 @@ include 'include/header.inc';
 		<link rel="stylesheet" href="css/centerdiv.css">
 		<link rel="stylesheet" href = "libs/fontawesome/css/all.min.css">
 		<script src="libs/easytimer/easytimer.min.js"></script>
-		<script src="libs/ol3/ol.js"></script>
 		<script src="libs/jquery/jquery-3.3.1.min.js"></script>
+		<script src="libs/ol3/ol.js"></script>
+
 		<script src="libs/bootstrap/js/bootstrap.min.js"></script>
 		<script src="cookie.js"></script>
 

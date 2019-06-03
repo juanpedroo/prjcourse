@@ -1,7 +1,7 @@
-<script src="lib/jquery/jquery-3.3.1.min.js"></script>
+<script src="libs/jquery/jquery-3.3.1.min.js"></script>
 <?php
 //admin connecté
-if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['organisateur'] == 't')
+if (isset($_SESSION['email']) && $_SESSION['organisateur'] == 't')
 {
 
     echo '<nav class="navbar navbar-default navbar-expand-lg navbar-light">
@@ -44,14 +44,14 @@ if (isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['or
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Bienvenue '. $_SESSION["prenom"] .' </a>
                 </li>
     			<li class="nav-item">
-    				<a href="actions/deconnection.php" class="btn btn-primary dropdown-toggle get-started-btn mt-1 mb-1">Déconnexion</a>
+    				<a href="requetes/deconnection.php" class="btn btn-primary dropdown-toggle get-started-btn mt-1 mb-1">Déconnexion</a>
     			</li>
     		</ul>
     	</div>
     </nav>';
 }
 //user connecté
-else if(isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION['organisateur'] == 'f')
+else if(isset($_SESSION['email']) && $_SESSION['organisateur'] == 'f')
 {
     echo '<nav class="navbar navbar-default navbar-expand-lg navbar-light">
     	<div class="navbar-header d-flex col">
@@ -84,7 +84,7 @@ else if(isset($_SESSION['email']) AND isset($_SESSION['password']) AND $_SESSION
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Bienvenue '. $_SESSION["prenom"] .' </a>
                 </li>
     			<li class="nav-item">
-    				<a href="actions/deconnection.php" class="btn btn-primary dropdown-toggle get-started-btn mt-1 mb-1">Déconnexion</a>
+    				<a href="requetes/deconnection.php" class="btn btn-primary dropdown-toggle get-started-btn mt-1 mb-1">Déconnexion</a>
     			</li>
     		</ul>
     	</div>
@@ -118,7 +118,7 @@ else
     				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Connexion</a>
     				<ul class="dropdown-menu form-wrapper">
     					<li>
-    						<form id = "connexion" action="actions/connection.php" method="post">
+    						<form id = "connexion" action="requetes/connection.php" method="post">
     							<div class="form-group">
     								<input type="email" id="email" name="email" class="form-control" placeholder="Adresse Mail" required="required">
     							</div>

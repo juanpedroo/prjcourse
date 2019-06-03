@@ -2,7 +2,7 @@
 // Récupération de l'id de l'option
 $q = intval($_POST['q']);
 
-include('../includes/connect.inc');
+include('../include/connect.inc');
 $idc = connect();
 
 // Requête

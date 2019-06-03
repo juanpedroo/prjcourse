@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/connect.inc');
+include('../include/connect.inc');
 $idc = connect();
 
 

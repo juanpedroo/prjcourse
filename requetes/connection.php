@@ -1,39 +1,42 @@
 <?php
     //session_start();
-    include('../includes/connect.inc');
+    include('../include/connect.inc');
     $idc = connect();
 
-    $pwd = $_POST['password'];
-    $pwd = password_hash($pwd, PASSWORD_DEFAULT);
+    $email = htmlspecialchars($_POST['email']);
+    $mdp = htmlspecialchars($_POST['password']);
 
     if( isset($_POST['email']) && isset($_POST['password']) )
     {
+		// Requête pour récupérer le mdp hashé de l'utilisateur
+      	$res = pg_query_params($idc, "SELECT id_individu, mdp_p, prenom_p, organisateur FROM individu WHERE mail_p = $1", array($email));
+      	$mdp_bdd = pg_fetch_all($res)[0]['mdp_p'];
+		$prenom = pg_fetch_all($res)[0]['prenom_p'];
+		$organisateur = pg_fetch_all($res)[0]['organisateur'];
+		$individu = pg_fetch_all($res)[0]['id_individu'];
 
-      $sql1= "select id_individu, prenom_p, organisateur from individu where mail_p= '".$_POST['email']."' AND mdp_p = crypt('".$_POST['password']."',mdp_p)";
-      $result=pg_query($idc,$sql1);
-      while($ligne = pg_fetch_assoc($result)) {
-        $individu = $ligne['id_individu'];
-        $prenom = $ligne['prenom_p'];
-        $organisateur = $ligne['organisateur'];
-      }
-      $num_rows=pg_num_rows($result);
-      if($num_rows>0)
-      {
-        session_start();
-        // Connecté
-        //header('Location: ../accueil.php');
-        $_SESSION['email'] = $_POST['email'];
-        $_SESSION['password'] = $_POST['password'];
-        $_SESSION['prenom'] = $prenom;
-        $_SESSION['organisateur'] = $organisateur;
-        $_SESSION['individu'] = $individu;
-        $reponse = "ok";
-      }
-      // Pb connection
-      else
-      {
-        $reponse = "ko";
-      }
-    }
+      	// Si un utilisateur a été trouvé avec ce login
+      	if(!empty($mdp_bdd)){
+      	  	// On vérifie si le mot de passe correspond
+          	if (password_verify($mdp, $mdp_bdd)) {
+
+			        session_start();
+			        // Connecté
+			        $_SESSION['email'] = $email;
+			        $_SESSION['prenom'] = $prenom;
+			        $_SESSION['organisateur'] = $organisateur;
+			        $_SESSION['individu'] = $individu;
+					$reponse = "ok";
+
+
+			}
+		}
+     }
+	// Pb connection
+    else
+    {
+		$reponse = "ko";
+	}
+
     echo json_encode(['reponse' => $reponse]);
 ?>
