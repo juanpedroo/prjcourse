@@ -17,9 +17,9 @@ if (isset($_SESSION['email']) && $_SESSION['organisateur'] == 't')
     	<!-- Collection of nav links, forms, and other content for toggling -->
     	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
     		<ul class="nav navbar-nav">
-    			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
-    			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
+    			<li class="nav-item"><a href="page_accueil.php" class="nav-link">Accueil</a></li>
+    			<li class="nav-item"><a href="page_association.php" class="nav-link">Association</a></li>
+    			<li class="nav-item"><a href="affichage_parcours.php" class="nav-link">Les parcours</a></li>
                 <li class="nav-item dropdown">
     				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Track <b class="caret"></b></a>
     				<ul class="dropdown-menu">
@@ -27,16 +27,20 @@ if (isset($_SESSION['email']) && $_SESSION['organisateur'] == 't')
     					<li><a href="tracking.php" class="dropdown-item">Tracking</a></li>
     				</ul>
     			</li>
-    			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
+    			<li class="nav-item"><a href="affichage_resultats.php" class="nav-link">Les résultats</a></li>
+    			<li class="nav-item"><a href="page_information.php" class="nav-link">Informations utiles</a></li>
                 <li class="nav-item dropdown">
     				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Administration <b class="caret"></b></a>
     				<ul class="dropdown-menu">
-    					<li><a href="#" class="dropdown-item">Option A</a></li>
-    					<li><a href="#" class="dropdown-item">Option B</a></li>
-    					<li><a href="#" class="dropdown-item">Option C</a></li>
+    					<li><a href="ajout_association.php" class="dropdown-item">Ajouter une association</a></li>
     					<li><a href="admin_association.php" class="dropdown-item">Choisir l\'association</a></li>
-    				</ul>
+              <li class="divider"></li>
+              <li><a href="gestion_course.php">Gestion des Courses</a></li>
+              <li class="divider"></li>
+              <li><a href="gestion_parcours.php">Gestion des Parcours</a></li>
+              <li class="divider"></li>
+              <li><a href="draw_parcours.php">Dessiner un parcours</a></li>
+            </ul>
     			</li>
     		</ul>
     		<ul class="nav navbar-nav navbar-right ml-auto">
@@ -66,9 +70,9 @@ else if(isset($_SESSION['email']) && $_SESSION['organisateur'] == 'f')
     	<!-- Collection of nav links, forms, and other content for toggling -->
     	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
     		<ul class="nav navbar-nav">
-    			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
-    			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Les parcours</a></li>
+    			<li class="nav-item"><a href="page_accueil.php" class="nav-link">Accueil</a></li>
+    			<li class="nav-item"><a href="page_association.php" class="nav-link">Association</a></li>
+    			<li class="nav-item"><a href="affichage_parcours.php" class="nav-link">Les parcours</a></li>
                 <li class="nav-item dropdown">
     				<a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Track <b class="caret"></b></a>
     				<ul class="dropdown-menu">
@@ -76,8 +80,8 @@ else if(isset($_SESSION['email']) && $_SESSION['organisateur'] == 'f')
     					<li><a href="tracking.php" class="dropdown-item">Tracking</a></li>
     				</ul>
     			</li>
-    			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
+    			<li class="nav-item"><a href="affichage_resultats.php" class="nav-link">Les résultats</a></li>
+    			<li class="nav-item"><a href="page_information.php" class="nav-link">Informations utiles</a></li>
     		</ul>
     		<ul class="nav navbar-nav navbar-right ml-auto">
                 <li class="nav-item">
@@ -106,12 +110,12 @@ else
     	<!-- Collection of nav links, forms, and other content for toggling -->
     	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
     		<ul class="nav navbar-nav">
-    			<li class="nav-item"><a href="accueil.php" class="nav-link">Accueil</a></li>
-    			<li class="nav-item"><a href="association.php" class="nav-link">Association</a></li>
-    			<li class="nav-item"><a href="parcours.php" class="nav-link">Les parcours</a></li>
+    			<li class="nav-item"><a href="page_accueil.php" class="nav-link">Accueil</a></li>
+    			<li class="nav-item"><a href="page_association.php" class="nav-link">Association</a></li>
+    			<li class="nav-item"><a href="affichage_parcours.php" class="nav-link">Les parcours</a></li>
                 <li class="nav-item"><a href="tracking.php" class="nav-link">Tracking</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Les résultats</a></li>
-    			<li class="nav-item"><a href="#" class="nav-link">Informations utiles</a></li>
+    			<li class="nav-item"><a href="affichage_resultats.php" class="nav-link">Les résultats</a></li>
+    			<li class="nav-item"><a href="page_information.php" class="nav-link">Informations utiles</a></li>
     		</ul>
     		<ul class="nav navbar-nav navbar-right ml-auto">
     			<li class="nav-item">

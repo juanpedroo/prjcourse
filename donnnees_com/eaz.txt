@@ -1,0 +1,3 @@
+COPY public.commune
+FROM 'C:\wamp64\www\SIGWEB\ANAIS.GRIGNON\projet\dev\données_com'
+DELIMITER ';' ENCODING 'latin1' CSV HEADER;

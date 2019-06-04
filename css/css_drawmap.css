@@ -1,0 +1,38 @@
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .h3, h3 {
+
+    }
+    #map {
+        position: absolute;
+        top: 0;
+        width: 95%;
+        height: 85%;
+        margin-left:3%;
+        margin-top:125px;
+        margin-right:5%;
+        border-style: groove;
+        border-color: #AAD8F7;
+    }
+    #delete, #export, #bd {
+        position: absolute;
+        top:50px;
+        right:10px;
+        z-index:100;
+        background:white;
+        color:black;
+        padding:6px;
+        border-radius:4px;
+        font-family: 'Arial';
+        cursor: pointer;
+        font-size:12px;
+        text-decoration:none;
+    }
+    #export {
+        top:90px;
+    }
+    #choixAnnee{
+      margin-left: 2%;
+    }
