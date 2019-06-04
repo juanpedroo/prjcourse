@@ -101,9 +101,9 @@ include 'include/header.inc';
 		<script>
 
 
-			var cpt = 0; // initialisation compteur tableau start;
+			var cpt = 0;
 			var cptDist = 0;
-			var tabDate = []; // initialisation tableau dateHeure
+			var tabDate = [];
 			var lat = 0.0;
 			var long = 0.0;
 			var latOld = 0.0;
@@ -134,7 +134,7 @@ include 'include/header.inc';
 
 
 
-
+			// Calcul allure
 			function calcCrow(lat1, lon1, lat2, lon2)
     		{
 			    var R = 6371; // km
@@ -151,29 +151,26 @@ include 'include/header.inc';
 			    return d;
     		}
 
-			// Converts numeric degrees to radians
+			// Conversion degrés en radian
 			function toRad(Value)
 			{
 				return Value * Math.PI / 180;
 			}
 
 			function calculatePace(dist, hrs, mins, secs) {
-			    //console.log(dist, hrs, mins, secs);
 			    dist = parseFloat(dist), hrs = parseFloat(hrs), mins = parseFloat(mins), secs = parseFloat(secs);
-			    //console.log(dist);
 			    var pace;
 			    var timeElapsed = 0;
 			    timeElapsed += hrs*60*60;
 			    timeElapsed += mins*60;
 			    timeElapsed += secs;
 			    var calculatedPace = Math.floor(timeElapsed/dist*1000);
-			    //console.log(calculatedPace);
 			    var paceMins = Math.floor(calculatedPace/60);
 			    var paceSecs = calculatedPace - (paceMins*60);
 			    pace = paceMins + '"' + paceSecs;
 			    return pace;
 			}
-			// create a style to display our position history (track)
+
 			var trackStyle = new ol.style.Style({
 				stroke: new ol.style.Stroke({
 				color: 'rgba(0,0,255,1.0)',
@@ -181,11 +178,11 @@ include 'include/header.inc';
 				lineCap: 'round'
 				})
 			});
-			// use a single feature with a linestring geometry to display our track
+
 			var trackFeature = new ol.Feature({
 				geometry: new ol.geom.LineString([])
 			});
-			// we'll need a vector layer to render it
+
 			var trackLayer = new ol.layer.Vector({
 				source: new ol.source.Vector({
 					features: [trackFeature]
@@ -248,7 +245,7 @@ include 'include/header.inc';
 				if (online = "deconnecte") {
 					cpt = 0;
 					cptDist = 0;
-					tabDate = []; // initialisation tableau dateHeure
+					tabDate = [];
 					lat = 0.0;
 					long = 0.0;
 					latOld = 0.0;
@@ -309,13 +306,12 @@ include 'include/header.inc';
 
 					// On transforme la projection des coordonnées
 					var newPosition=ol.proj.transform(position, 'EPSG:3857', 'EPSG:4326');
-					// $("#latitude").html(newPosition[1]);
-					// $("#longitude").html(newPosition[0]);
+
 
 					// Attribution de la géométrie de ObjPosition avec les coordonnées de la position
 					ObjPosition.setGeometry( position ? new ol.geom.Point(position) : null );
 					var precision = geolocation.getAccuracy();
-					//$("#precision").html(precision);
+
 
 					lat = newPosition[1];
 					long = newPosition[0];
@@ -324,9 +320,9 @@ include 'include/header.inc';
 					// vitesse instant vmax et vmin et vmoy
 					speed = 3.6 * geolocation.getSpeed() || 0;
 					$(".vitesse").html("<h4>"+ speed.toFixed(2) + " km/h</h4>");
-					$(".vmax").html("<h4>"+vmax.toFixed(2)+" km/h</h4");
-					$(".vmin").html("<h4>"+vmin.toFixed(2)+" km/h</h4");
-					$(".vmoy").html("<h4>"+vmoy.toFixed(2)+" km/h</h4");
+					$(".vmax").html("<h4>" + vmax.toFixed(2) + " km/h</h4");
+					$(".vmin").html("<h4>" + vmin.toFixed(2) + " km/h</h4");
+					$(".vmoy").html("<h4>" + vmoy.toFixed(2) + " km/h</h4");
 					if (vmin > speed){
 						vmin = speed;
 					}
@@ -368,7 +364,6 @@ include 'include/header.inc';
 					min = $(".durée").html().substring(7,9);
 					//sec = parseInt($(".durée").html().substring(6,8));
 					sec = $(".durée").html().substring(10,12);
-					console.log(hr + "&"+ min + "&" + sec);
 					allureCalc = calculatePace(total, hr, min,sec);
 					$(".allure").html("<h4>"+allureCalc+ "</h4>");
 
@@ -406,7 +401,6 @@ include 'include/header.inc';
 					// Envoi des infos de géolocalisation
 					$.post('requetes/insertgeocoord.php',
 						{
-
 							type_point: type_point,
 							lat: lat,
 							long: long,

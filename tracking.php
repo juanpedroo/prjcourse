@@ -37,10 +37,10 @@ $idc = connect();
 	</head>
 	<body>
         <?php
-			$sql0= "UPDATE public.individu
+            $sql0= "UPDATE public.individu
 					SET online = 'deconnecte'
 					WHERE now() - last_activity > '00:01:00.00'";
-			pg_exec($idc,$sql0);
+            pg_exec($idc, $sql0);
 
             $sql = "SELECT id_individu, nom_p, prenom_p
             FROM public.individu
@@ -50,7 +50,7 @@ $idc = connect();
         <select id="online" name="online" onchange="showOnline(this.value); recupDonnees();" class="form-control">
 			<option value = "0" >Veuillez selectionnez un particpant actuellement en ligne</option>
             <?php
-                while($ligne = pg_fetch_assoc($resultat)) {
+                while ($ligne = pg_fetch_assoc($resultat)) {
                     print('<option value="'.$ligne['id_individu'].'">'.$ligne['prenom_p'].' '.$ligne['nom_p'].'</option>');
                 }
             ?>
@@ -161,7 +161,7 @@ $idc = connect();
 
 
 			var id_individu = 0;
-			// create a style to display our position history (track)
+
 			var trackStyle = new ol.style.Style({
 				stroke: new ol.style.Stroke({
 				color: 'rgba(0,0,255,1.0)',
@@ -169,11 +169,11 @@ $idc = connect();
 				lineCap: 'round'
 				})
 			});
-			// use a single feature with a linestring geometry to display our track
+
 			var trackFeature = new ol.Feature({
 				geometry: new ol.geom.LineString([])
 			});
-			// we'll need a vector layer to render it
+
 			var trackLayer = new ol.layer.Vector({
 				source: new ol.source.Vector({
 					features: [trackFeature]
@@ -192,7 +192,7 @@ $idc = connect();
 				maxZoom: 23,
 				projection: 'EPSG:4326',
 			});
-			// Carte avec un fonds de carte
+			// Carte avec un fond de carte
 			var map = new ol.Map({
 				layers: [baseLayer, trackLayer],
 				target: 'carte',
@@ -214,7 +214,7 @@ $idc = connect();
 				})
 			}));
 
-			//Obtention des infos de tracking
+
 			var id_point = 0;
 			// var coordonnees = [];
 
@@ -236,15 +236,14 @@ $idc = connect();
 				$(".altmax").html("0 m");
 				$(".altmoy").html("0 m");
 
-
-
-				// Raz de trackfeature
+				// Raz du tracé
 				trackLayer.getSource().removeFeature(trackFeature);
 				trackFeature = new ol.Feature({
 					geometry: new ol.geom.LineString([])
 				});
 				trackLayer.getSource().addFeature(trackFeature);
 			}
+			//Obtention des infos de tracking
 			function recupDonnees() {
 
 				$.post('./requetes/get_online.php',
@@ -258,7 +257,6 @@ $idc = connect();
 						if (id_individu != 0 && data != "Offline" && data != "false") {
 
 							JSON.parse(data).forEach((ligne) => {
-								// console.log(ligne);
 								coordonnees[0] = (parseFloat(ligne.longitude));
 								coordonnees[1] = (parseFloat(ligne.latitude));
 								points.push(parseInt(ligne.id_point));
@@ -267,16 +265,16 @@ $idc = connect();
 		        				trackFeature.getGeometry().appendCoordinate(coordonnees);
 								lat = coordonnees[1];
 								long = coordonnees[0];
-
 								temps.push(ligne.chrono);
+
 								// On affiche les stats sur la page
 								$(".durée").html(temps[temps.length-1]);
 								// vitesse instant vmax et vmin et vmoy
 								speed = parseFloat(ligne.vitesse);
-								$(".vitesse").html(speed.toFixed(2));
-								$(".vmax").html(vmax.toFixed(2));
-								$(".vmin").html(vmin.toFixed(2));
-								$(".vmoy").html(vmoy.toFixed(2));
+								$(".vitesse").html("<h4>" + speed.toFixed(2) + " km/h</h4>");
+								$(".vmax").html("<h4>" + vmax.toFixed(2) + " km/h</h4");
+								$(".vmin").html("<h4>" + vmin.toFixed(2) + " km/h</h4");
+								$(".vmoy").html("<h4>" + vmoy.toFixed(2) + " km/h</h4");
 								if (vmin > speed){
 									vmin = speed;
 								}
@@ -293,7 +291,7 @@ $idc = connect();
 
 								//Distance parcourue
 								if (latOld == 0 || longOld == 0) {
-									$(".distance").html("0");
+									$(".distance").html("<h4>0 m</h4>");
 								}
 								else if (lat != latOld || long != longOld){
 									//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
@@ -303,30 +301,27 @@ $idc = connect();
 									cptDist++;
 								}
 								if(total < 1000) {
-									$(".distance").html(total.toFixed(0) + " Mètres");
+									$(".distance").html("<h4>"+total.toFixed(0)+" m</h4>");
 								}
 								else {
-									$(".distance").html(totalKM.toFixed(1) + " KM");
+									$(".distance").html("<h4>"+totalKM.toFixed(1)+" km</h4>")
 								}
 								latOld = lat;
 								longOld = long;
 
 								//allure
-								//hr = parseInt($(".durée").html().substring(0,3));
 								hr = $(".durée").html().substring(0,2);
-								//min = parseInt($(".durée").html().substring(3,5));
 								min = $(".durée").html().substring(3,5);
-								//sec = parseInt($(".durée").html().substring(6,8));
 								sec = $(".durée").html().substring(6,8);
 								var allure = calculatePace(total, hr, min,sec);
-								$(".allure").html(allure + " KM/Min");
+								$(".allure").html("<h4>"+ allure + "</h4>");
 
 								// altitude act, min, max, moy
 								alt = parseFloat(ligne.altitude);
-								$(".alt").html(alt.toFixed(0));
-								$(".altmax").html(altmax.toFixed(0));
-								$(".altmin").html(altmin.toFixed(0));
-								$(".altmoy").html(altmoy.toFixed(0));
+								$(".alt").html("<h4>"+alt.toFixed(0)+" m</h4");
+								$(".altmax").html("<h4>"+altmax.toFixed(0)+" m</h4");
+								$(".altmin").html("<h4>"+altmin.toFixed(0)+" m</h4");
+								$(".altmoy").html("<h4>"+altmoy.toFixed(0)+" m</h4");
 								if (altmin > alt){
 									altmin = alt;
 								}
@@ -362,7 +357,7 @@ $idc = connect();
 				map: map,
 				source: sourceVecteur
 			});
-
+			// On recup les données toutes les 5 secondes
 			setInterval("recupDonnees()",5000);
 
         </script>

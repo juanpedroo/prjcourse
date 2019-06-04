@@ -56,7 +56,7 @@
     ?>
 	<br>
 	<div class="description_page centre">
-		<p>Cette page disponible uniquement pour les administrateurs vous permettra d'ajouter en base de données une association. Veillez à bien remplir tous les champs</p>
+		<p>Cette page vous permettra d'ajouter en base de données une association. Veillez à bien remplir tous les champs</p>
 	</div>
 	<br>
 	<div class="container">
@@ -66,7 +66,7 @@
 		    </div>
 			<div class="col-sm">
 			<!-- Millieu -->
-			<form>
+			<form id="ajout_assoc">
 				<div class="form-group">
 					<label for="nomAssociation">Nom de l'association</label>
 					<input type="text" class="form-control" id="nom" placeholder="nom@example.fr">
@@ -105,7 +105,31 @@
 			</div>
 		</div>
 	</div>
+    <script type="text/javascript">
+        $.post('requetes/add_association.php',
+            {
+                nom : $("#nom").html(),
+                adresse: $("#adresse").html(),
+                cp : $("#codepostal").html(),
+                ville : $("#ville").html(),
+                desc : $("#description").html(),
+                tel : $("telephone").html(),
+                directeur : $("#directeur").html(),
+            },
+            function data() {
+                if (data == 'ok') {
+                    alert("Ajout effectué");
+                }
+                else {
+                    alert("Erreur !");
+                }
+            }
+        );
+        if (1 == 1)
+        {
 
+        }
+    </script>
 
 </body>
 
