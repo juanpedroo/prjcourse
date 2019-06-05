@@ -69,19 +69,19 @@
 			<form id="ajout_assoc">
 				<div class="form-group">
 					<label for="nomAssociation">Nom de l'association</label>
-					<input type="text" class="form-control" id="nom" placeholder="nom@example.fr">
+					<input type="text" class="form-control" id="nom" placeholder="Bram réfugiés" maxlength="25">
 				</div>
 				<div class="form-group">
 					<label for="addresseAssociation">Adresse</label>
-					<input type="text" class="form-control" id="addresse" placeholder="1 rue des églantiers">
+					<input type="text" class="form-control" id="adresse" placeholder="1 rue des églantiers" maxlength="50">
 				</div>
 				<div class="form-group">
 					<label for="cpAssociation">Code postal</label>
-					<input type="number" class="form-control" id="codepostal" placeholder="11300">
+					<input type="number" class="form-control" id="codepostal" placeholder="11300" maxlength="5">
 				</div>
 				<div class="form-group">
 					<label for="villeAssociation">Ville</label>
-					<input type="text" class="form-control" id="ville" placeholder="Bram">
+					<input type="text" class="form-control" id="ville" placeholder="Bram" maxlength="25">
 				</div>
 				<div class="form-group">
 					<label for="descriptionAssociation">Description de l'association</label>
@@ -89,11 +89,11 @@
 				</div>
 				<div class="form-group">
 					<label for="telephoneAssociation">N° de téléphone</label>
-					<input type="tel" class="form-control" id="telephone" placeholder="0606480648">
+					<input type="tel" class="form-control" id="telephone" placeholder="0606480648" maxlength="10">
 				</div>
 				<div class="form-group">
 					<label for="directeurAssociation">Identité du directeur</label>
-					<input type="text" class="form-control" id="directeur" placeholder="Claude Dupont">
+					<input type="text" class="form-control" id="directeur" placeholder="Claude Dupont" maxlength="25">
 				</div>
 				<div class = "form-group">
 					<input type="submit" name="submit" class=" btn btn-vert btn-block" value="Valider">
@@ -106,29 +106,30 @@
 		</div>
 	</div>
     <script type="text/javascript">
+    $( "#ajout_assoc" ).submit(function( event ) {
         $.post('requetes/add_association.php',
             {
-                nom : $("#nom").html(),
-                adresse: $("#adresse").html(),
-                cp : $("#codepostal").html(),
-                ville : $("#ville").html(),
-                desc : $("#description").html(),
-                tel : $("telephone").html(),
-                directeur : $("#directeur").html(),
+                nom : $("#nom").val(),
+                adresse: $("#adresse").val(),
+                cp : $("#codepostal").val(),
+                ville : $("#ville").val(),
+                desc : $("#description").val(),
+                tel : $("#telephone").val(),
+                directeur : $("#directeur").val(),
             },
-            function data() {
-                if (data == 'ok') {
+            function (data) {
+                if (data == "ok") {
                     alert("Ajout effectué");
+                    document.location.href='../ajout_association.php'
                 }
                 else {
                     alert("Erreur !");
                 }
             }
         );
-        if (1 == 1)
-        {
+        event.preventDefault();
+    });
 
-        }
     </script>
 
 </body>

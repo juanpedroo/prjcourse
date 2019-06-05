@@ -24,23 +24,9 @@ include 'include/header.inc';
 		<script src="cookie.js"></script>
         <script src = "libs/chartjs/Chart.bundle.min.js"></script>
 
-		<!-- <style>
-			.carte {
-			height: 400px;
-			width: 100%;
-			}
-  		</style> -->
 	</head>
     <body>
         <div class="container">
-
-    		<!-- <div class="row map">
-    			<div class="col-md-3"></div>
-    			<div class="col-md-6"></div>
-    				<div id ="carte" class ="carte"></div>
-    			<div class="col-md-3"></div>
-    		</div> -->
-
     		<div class="row stats-gen-libelle">
     		   <div class="col-md-4 center-text">Durée <i class="far fa-clock"></i></div>
     		   <div class="col-md-4 center-text">Distance <i class="fas fa-ruler-horizontal"></i></div>
@@ -86,21 +72,71 @@ include 'include/header.inc';
         distanceTot = lireCookie("distanceTot");
         distanceTot = parseInt(distanceTot);
 
+        // Tableau des vitesses
         chaineSpeed = lireCookie("tabSpeed");
         tabSpeed = chaineSpeed.split(',');
-
+        //tableau des altitudes
         chaineAlt = lireCookie("tabAlt");
         tabAlt = chaineAlt.split(',');
 
+
         chaineDist = lireCookie("distance")
         tabDist = chaineDist.split(',')
+        allure = lireCookie("allure");
+        distance = parseInt(lireCookie("distanceTot"));
+        duree = lireCookie("duree");
+        vmax = 0;
+        vmin = 9999;
+        vmoy = 0;
+        altmax = 0;
+        altmin = 9999;
+        altmoy = 0;
+        // Obtention vmax
+        for (i=0; i < tabSpeed[tabSpeed.length-1]; i++) {
+            if (vmax < tabSpeed[i]) {
+                vmax = tabSpeed[i];
+            }
+        }
 
-        $(".vmax").html("<h4>"+vmax.toFixed(2)+" km/h</h4");
-        $(".vmin").html("<h4>"+vmin.toFixed(2)+" km/h</h4");
-        $(".vmoy").html("<h4>"+vmoy.toFixed(2)+" km/h</h4");
-        $(".altmax").html("<h4>"+altmax.toFixed(0)+" m</h4");
-        $(".altmin").html("<h4>"+altmin.toFixed(0)+" m</h4");
-        $(".altmoy").html("<h4>"+altmoy.toFixed(0)+" m</h4");
+        // Obtention vmin
+        for (i=0; i < tabSpeed[tabSpeed.length-1]; i++) {
+            if (vmin > tabSpeed[i]) {
+                vmin = tabSpeed[i];
+            }
+        }
+
+        // Obtention vmoy
+        for (i=0; i < tabAlt[tabAlt.length-1]; i++) {
+            vmoy = vmoy + tabSpeed[i];
+        }
+
+        // Obtention altmax
+        for (i=0; i < tabAlt[tabAlt.length-1]; i++) {
+            if (altmax < tabAlt[i]) {
+                altmax = tabAlt[i];
+            }
+        }
+
+        // Obtention altmin
+        for (i=0; i < tabAlt[tabAlt.length-1]; i++) {
+            if (altmin > tabAlt[i]) {
+                altmin = tabAlt[i];
+            }
+        }
+
+        // Obtention altmoy
+        for (i=0; i < tabAlt[tabAlt.length-1]; i++) {
+            altmoy = altmoy + tabAlt[i];
+        }
+        $(".durée").html("<h4>"+duree+"</h4");
+        $(".distance").html("<h4>"+distance.toFixed(1)+"</h4");
+        $(".allure").html("<h4>"+allure+"</h4");
+        $(".vmax").html("<h4>"+parseInt(vmax).toFixed(2)+" km/h</h4");
+        $(".vmin").html("<h4>"+parseInt(vmin).toFixed(2)+" km/h</h4");
+        $(".vmoy").html("<h4>"+parseInt(vmoy).toFixed(2)+" km/h</h4");
+        $(".altmax").html("<h4>"+parseInt(altmax).toFixed(0)+" m</h4");
+        $(".altmin").html("<h4>"+parseInt(altmin).toFixed(0)+" m</h4");
+        $(".altmoy").html("<h4>"+parseInt(altmoy).toFixed(0)+" m</h4");
         // Chart vitesse
         var ctx = $('#chartVitesse')[0].getContext('2d');
         var vitesse = new Chart(ctx, {
